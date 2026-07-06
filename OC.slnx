@@ -9,6 +9,12 @@
   <Folder Name="/src/" />
   <Folder Name="/src/Bootstrapper/">
     <Project Path="src/Bootstrapper/OC.Bootstrapper.API/OC.Bootstrapper.API.csproj" />
+    <Project Path="src/Bootstrapper/OC.Bootstrapper.Application/OC.Bootstrapper.Application.csproj" Id="a4015b2e-b8d8-4a35-85ac-f3d2e656623b" />
+    <Project Path="src/Bootstrapper/OC.Bootstrapper.Domain/OC.Bootstrapper.Domain.csproj" Id="94647186-4064-46d5-a4ee-fde51146de71" />
+    <Project Path="src/Bootstrapper/OC.Bootstrapper.Infrastructure/OC.Bootstrapper.Infrastructure.csproj" Id="9f94ce05-edeb-4783-8206-60079ce6df0f" />
+    <Project Path="src/Bootstrapper/OC.Bootstrapper.Shared/OC.Bootstrapper.Shared.csproj" Id="8e00a948-9ae7-4d0d-9d28-9995713b79c8" />
   </Folder>
-  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/OC.BuildingBlocks.SharedKernel/OC.BuildingBlocks.SharedKernel.csproj" Id="8176b9da-5aaa-4f87-9f0b-100ce9be11f9" />
+  </Folder>
 </Solution>
