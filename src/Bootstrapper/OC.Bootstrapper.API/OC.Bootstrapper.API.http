@@ -1,0 +1,6 @@
+@OC.Bootstrapper.API_HostAddress = http://localhost:5214
+
+GET {{OC.Bootstrapper.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
