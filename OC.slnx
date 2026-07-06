@@ -17,4 +17,8 @@
   <Folder Name="/src/BuildingBlocks/">
     <Project Path="src/BuildingBlocks/OC.BuildingBlocks.SharedKernel/OC.BuildingBlocks.SharedKernel.csproj" Id="8176b9da-5aaa-4f87-9f0b-100ce9be11f9" />
   </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/OC.Architecture.Tests/">
+    <Project Path="tests/OC.Architecture.Tests/OC.Architecture.Tests.csproj" />
+  </Folder>
 </Solution>

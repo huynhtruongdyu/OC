@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OC.Bootstrapper.Shared\OC.Bootstrapper.Shared.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\OC.BuildingBlocks.SharedKernel\OC.BuildingBlocks.SharedKernel.csproj" />
+  </ItemGroup>
+
 </Project>

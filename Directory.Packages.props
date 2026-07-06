@@ -13,5 +13,10 @@
     <PackageVersion Include="Scalar.AspNetCore" Version="2.*" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.27.0.140913" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <PackageVersion Include="FluentAssertions" Version="7.*" />
+    <PackageVersion Include="NetArchTest.Rules" Version="1.*" />
+    <PackageVersion Include="xunit" Version="2.*" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.*" />
   </ItemGroup>
 </Project>

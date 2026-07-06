@@ -14,4 +14,11 @@
     <PackageReference Include="Scalar.AspNetCore" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OC.Bootstrapper.Application\OC.Bootstrapper.Application.csproj" />
+    <ProjectReference Include="..\OC.Bootstrapper.Infrastructure\OC.Bootstrapper.Infrastructure.csproj" />
+    <ProjectReference Include="..\OC.Bootstrapper.Shared\OC.Bootstrapper.Shared.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\OC.BuildingBlocks.SharedKernel\OC.BuildingBlocks.SharedKernel.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -61,7 +61,11 @@ dotnet_naming_rule.properties_should_be_pascal_case.severity = suggestion
 ###############################
 
 # S2094: Classes should not be empty
+dotnet_diagnostic.CA1307.severity = suggestion
+dotnet_diagnostic.CA1310.severity = suggestion
 dotnet_diagnostic.CA1515.severity = suggestion
+dotnet_diagnostic.CA1707.severity = suggestion
+dotnet_diagnostic.CA1716.severity = suggestion
 dotnet_diagnostic.CA1812.severity = suggestion
 dotnet_diagnostic.CA1822.severity = suggestion
 dotnet_diagnostic.CA1852.severity = suggestion
