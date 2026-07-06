@@ -1,5 +1,5 @@
 namespace OC.Bootstrapper.API.Filters;
 
-internal class IntegrationApiKeyFilter {
+internal sealed class IntegrationApiKeyFilter {
     
 }

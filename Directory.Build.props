@@ -5,7 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>all</AnalysisMode>
-    <WarningsNotAsErrors>CA5394;S6966;S6960</WarningsNotAsErrors>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>

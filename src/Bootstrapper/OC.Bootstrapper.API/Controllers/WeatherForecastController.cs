@@ -2,9 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OC.Bootstrapper.API.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-internal class WeatherForecastController : ControllerBase {
+public sealed class WeatherForecastController : InternalController {
     private static readonly string[] Summaries =
     [
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
