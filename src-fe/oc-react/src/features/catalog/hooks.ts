@@ -1,17 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { showToast } from '@/lib';
-import {
-  createCategory,
-  createProduct,
-  deleteCategory,
-  deleteProduct,
-  getCategories,
-  getCategory,
-  getProduct,
-  getProducts,
-  updateCategory,
-  updateProduct,
-} from './api';
+import { productService, categoryService } from './services';
 
 export const catalogKeys = {
   all: ['catalog'] as const,
@@ -24,19 +13,15 @@ export const catalogKeys = {
 /* ───── Products ───── */
 
 export const useProducts = () =>
-  useQuery({ queryKey: catalogKeys.products(), queryFn: getProducts });
+  useQuery({ queryKey: catalogKeys.products(), queryFn: productService.getAll });
 
 export const useProduct = (id: string) =>
-  useQuery({
-    queryKey: catalogKeys.product(id),
-    queryFn: () => getProduct(id),
-    enabled: !!id,
-  });
+  useQuery({ queryKey: catalogKeys.product(id), queryFn: () => productService.getById(id), enabled: !!id });
 
 export const useCreateProduct = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: createProduct,
+    mutationFn: productService.create,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: catalogKeys.products() });
       showToast.success('Product created');
@@ -47,13 +32,8 @@ export const useCreateProduct = () => {
 export const useUpdateProduct = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: string;
-      data: Parameters<typeof updateProduct>[1];
-    }) => updateProduct(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Parameters<typeof productService.update>[1] }) =>
+      productService.update(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: catalogKeys.products() });
       showToast.success('Product updated');
@@ -64,7 +44,7 @@ export const useUpdateProduct = () => {
 export const useDeleteProduct = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: deleteProduct,
+    mutationFn: productService.remove,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: catalogKeys.products() });
       showToast.success('Product deleted');
@@ -75,19 +55,15 @@ export const useDeleteProduct = () => {
 /* ───── Categories ───── */
 
 export const useCategories = () =>
-  useQuery({ queryKey: catalogKeys.categories(), queryFn: getCategories });
+  useQuery({ queryKey: catalogKeys.categories(), queryFn: categoryService.getAll });
 
 export const useCategory = (id: string) =>
-  useQuery({
-    queryKey: catalogKeys.category(id),
-    queryFn: () => getCategory(id),
-    enabled: !!id,
-  });
+  useQuery({ queryKey: catalogKeys.category(id), queryFn: () => categoryService.getById(id), enabled: !!id });
 
 export const useCreateCategory = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: createCategory,
+    mutationFn: categoryService.create,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: catalogKeys.categories() });
       showToast.success('Category created');
@@ -98,13 +74,8 @@ export const useCreateCategory = () => {
 export const useUpdateCategory = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: string;
-      data: Parameters<typeof updateCategory>[1];
-    }) => updateCategory(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Parameters<typeof categoryService.update>[1] }) =>
+      categoryService.update(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: catalogKeys.categories() });
       showToast.success('Category updated');
@@ -115,7 +86,7 @@ export const useUpdateCategory = () => {
 export const useDeleteCategory = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: deleteCategory,
+    mutationFn: categoryService.remove,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: catalogKeys.categories() });
       showToast.success('Category deleted');

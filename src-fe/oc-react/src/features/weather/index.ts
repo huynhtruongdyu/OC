@@ -4,6 +4,7 @@ export {
   getSlowWeatherForecast,
   getFailedWeatherForecast,
 } from './api';
+export { weatherService } from './services';
 export {
   useWeatherForecast,
   useMockWeatherForecast,

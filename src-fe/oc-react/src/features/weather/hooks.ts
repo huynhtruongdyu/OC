@@ -1,10 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-  getFailedWeatherForecast,
-  getMockWeatherForecast,
-  getSlowWeatherForecast,
-  getWeatherForecast,
-} from './api';
+import { weatherService } from './services';
 
 export const weatherKeys = {
   all: ['weather'] as const,
@@ -14,26 +9,16 @@ export const weatherKeys = {
 };
 
 export const useWeatherForecast = () =>
-  useQuery({
-    queryKey: weatherKeys.forecast(),
-    queryFn: getWeatherForecast,
-  });
+  useQuery({ queryKey: weatherKeys.forecast(), queryFn: weatherService.getForecast });
 
 export const useMockWeatherForecast = () =>
-  useQuery({
-    queryKey: weatherKeys.mock(),
-    queryFn: getMockWeatherForecast,
-  });
+  useQuery({ queryKey: weatherKeys.mock(), queryFn: weatherService.getMock });
 
 export const useSlowWeatherForecast = (delayMs = 5000) =>
   useQuery({
     queryKey: [...weatherKeys.all, 'slow', delayMs],
-    queryFn: () => getSlowWeatherForecast(delayMs),
+    queryFn: () => weatherService.getSlow(delayMs),
   });
 
 export const useFailedWeatherForecast = () =>
-  useQuery({
-    queryKey: weatherKeys.failed(),
-    queryFn: getFailedWeatherForecast,
-    retry: false,
-  });
+  useQuery({ queryKey: weatherKeys.failed(), queryFn: weatherService.getFailed, retry: false });

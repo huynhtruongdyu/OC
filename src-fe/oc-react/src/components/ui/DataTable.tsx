@@ -6,7 +6,7 @@ import type { SorterResult } from 'antd/es/table/interface';
 
 export type DataTableColumn<T> = {
   title: string;
-  dataIndex?: keyof T;
+  dataIndex?: keyof T & string;
   key?: string;
   width?: number;
   sortable?: boolean;
@@ -51,7 +51,7 @@ export const DataTable = <T extends object>({
 }: DataTableProps<T>) => {
   const isServerSide = !!onSearchChange;
   const [searchText, setSearchText] = useState('');
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const filteredData = useMemo(
     () =>

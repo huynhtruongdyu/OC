@@ -1,9 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { login, refresh, register } from './api';
+import { authService } from './services';
 
-export const useLogin = () => useMutation({ mutationFn: login });
+export const useLogin = () => useMutation({ mutationFn: authService.login });
 
-export const useRegister = () => useMutation({ mutationFn: register });
+export const useRegister = () => useMutation({ mutationFn: authService.register });
 
-export const useRefresh = () =>
-  useMutation({ mutationFn: (refreshToken: string) => refresh(refreshToken) });
+export const useRefresh = () => useMutation({ mutationFn: authService.refresh });
