@@ -102,10 +102,10 @@ const MainLayout = () => {
           </Typography.Title>
           <Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
             <div className="flex items-center gap-2 cursor-pointer">
-              <Avatar icon={<UserOutlined />} />
               <span className="text-sm">
                 {user?.displayName} ({user?.roles?.join(', ')})
               </span>
+              <Avatar icon={<UserOutlined />} />
             </div>
           </Dropdown>
         </Header>
