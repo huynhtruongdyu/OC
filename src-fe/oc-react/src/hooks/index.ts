@@ -1,3 +1,1 @@
-// Shared custom React hooks
-// Example: useDebounce, useMediaQuery, useLocalStorage
-export {};
+export { useAuth } from './useAuth';

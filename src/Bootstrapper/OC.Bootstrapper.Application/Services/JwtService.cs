@@ -1,10 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
-
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-
 using OC.Bootstrapper.Application.Abstractions.Services;
 using OC.Bootstrapper.Domain.Identities;
 
@@ -15,10 +14,11 @@ public sealed class JwtOptions {
     public string Issuer { get; init; } = string.Empty;
     public string Audience { get; init; } = string.Empty;
     public int ExpirationMinutes { get; init; }
+    public int RefreshTokenExpirationDays { get; init; } = 7;
 }
 
 public sealed class JwtService(IOptions<JwtOptions> options) : IJwtService {
-    public string GenerateToken(AppUser user, IList<string> roles) {
+    public string GenerateAccessToken(AppUser user, IList<string> roles) {
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -40,4 +40,9 @@ public sealed class JwtService(IOptions<JwtOptions> options) : IJwtService {
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public string GenerateRefreshToken() {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+    }
+
 }

@@ -1,15 +1,22 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Typography } from 'antd';
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useLogin } from '@/features/auth';
+import { useAuth } from '@/hooks/useAuth';
 
 const LoginPage = () => {
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { setSession } = useAuth();
+  const { mutate, isPending } = useLogin();
 
-  const onFinish = (values: { email: string; password: string }) => {
-    setLoading(true);
-    console.log('Login:', values);
-    setTimeout(() => setLoading(false), 1000);
+  const onFinish = (values: { username: string; password: string }) => {
+    mutate(values, {
+      onSuccess: (data) => {
+        setSession(data);
+        navigate('/');
+      },
+      onError: () => {},
+    });
   };
 
   return (
@@ -18,14 +25,14 @@ const LoginPage = () => {
         Sign In
       </Typography.Title>
       <Form layout="vertical" onFinish={onFinish} size="large">
-        <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>
-          <Input prefix={<MailOutlined />} placeholder="Email" />
+        <Form.Item name="username" rules={[{ required: true }]}>
+          <Input prefix={<UserOutlined />} placeholder="Username" />
         </Form.Item>
         <Form.Item name="password" rules={[{ required: true }]}>
           <Input.Password prefix={<LockOutlined />} placeholder="Password" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading} block className='mt-2'>
+          <Button type="primary" htmlType="submit" loading={isPending} block className='mt-2'>
             Sign In
           </Button>
         </Form.Item>
