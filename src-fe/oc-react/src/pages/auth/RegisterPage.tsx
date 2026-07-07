@@ -13,22 +13,22 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="w-full max-w-sm">
+    <div className="w-full max-w-sm bg-white p-6 rounded-lg shadow-sm border border-gray-200">
       <Typography.Title level={2} className="text-center mb-6">
         Create Account
       </Typography.Title>
       <Form layout="vertical" onFinish={onFinish} size="large">
-        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-          <Input prefix={<UserOutlined />} placeholder="Name" />
+        <Form.Item name="username" rules={[{ required: true }]}>
+          <Input prefix={<UserOutlined />} placeholder="Username" />
         </Form.Item>
-        <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
+        <Form.Item name="email" rules={[{ required: true, type: 'email' }]}>
           <Input prefix={<MailOutlined />} placeholder="Email" />
         </Form.Item>
-        <Form.Item name="password" label="Password" rules={[{ required: true, min: 6 }]}>
+        <Form.Item name="password" rules={[{ required: true, min: 6 }]}>
           <Input.Password prefix={<LockOutlined />} placeholder="Password" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading} block>
+          <Button type="primary" htmlType="submit" loading={loading} block className='mt-2'>
             Register
           </Button>
         </Form.Item>
