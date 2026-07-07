@@ -5,6 +5,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApiDocument();
 builder.Services.AddVersioning();
 builder.Services.AddCorsPolicy(configuration);
+builder.Services.AddInfrastructure(configuration);
+builder.Services.AddIdentityServices();
 
 var app = builder.Build();
 
@@ -14,4 +16,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-app.Run();
+await OC.Bootstrapper.Infrastructure.Persistence.Seed.IdentitySeed.SeedAsync(app.Services).ConfigureAwait(false);
+
+await app.RunAsync().ConfigureAwait(false);

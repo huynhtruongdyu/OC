@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\OC.Bootstrapper.Application\OC.Bootstrapper.Application.csproj" />
     <ProjectReference Include="..\OC.Bootstrapper.Domain\OC.Bootstrapper.Domain.csproj" />
     <ProjectReference Include="..\OC.Bootstrapper.Shared\OC.Bootstrapper.Shared.csproj" />
