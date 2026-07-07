@@ -20,3 +20,13 @@ export {
   useRefresh,
 } from './auth';
 export type { AuthResponse, LoginRequest, RegisterRequest } from './auth';
+
+export {
+  useProducts, useProduct, useCreateProduct, useUpdateProduct, useDeleteProduct,
+  useCategories, useCategory, useCreateCategory, useUpdateCategory, useDeleteCategory,
+  catalogKeys,
+} from './catalog';
+export type {
+  Product, ProductCreateRequest, ProductUpdateRequest,
+  Category, CategoryCreateRequest, CategoryUpdateRequest,
+} from './catalog';

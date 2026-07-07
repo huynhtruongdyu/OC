@@ -9,6 +9,7 @@ import {
   WarningOutlined,
   UserOutlined,
   LogoutOutlined,
+  ShoppingOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -33,6 +34,15 @@ const LoadingBar = () => {
 const menuItems = [
   { key: '/', icon: <DashboardOutlined />, label: 'Dashboard' },
   {
+    key: 'catalog',
+    icon: <ShoppingOutlined />,
+    label: 'Catalog',
+    children: [
+      { key: '/catalog/products', label: 'Products' },
+      { key: '/catalog/categories', label: 'Categories' },
+    ],
+  },
+  {
     key: 'weather',
     icon: <CloudOutlined />,
     label: 'Weather',
@@ -52,7 +62,10 @@ const MainLayout = () => {
   const { user, logout } = useAuth();
 
   const selectedKey = location.pathname === '/' ? '/' : location.pathname;
-  const openKeys = location.pathname.startsWith('/weather') ? ['weather'] : [];
+  const openKeys = [
+    ...(location.pathname.startsWith('/weather') ? ['weather'] as const : []),
+    ...(location.pathname.startsWith('/catalog') ? ['catalog'] as const : []),
+  ];
 
   const dropdownItems: MenuProps['items'] = [
     { key: 'info', label: user?.displayName, disabled: true },
@@ -83,9 +96,11 @@ const MainLayout = () => {
           selectedKeys={[selectedKey]}
           defaultOpenKeys={openKeys}
           items={menuItems}
-          onClick={({ key }) =>
-            navigate(key === 'weather' ? '/weather/current' : key)
-          }
+          onClick={({ key }) => {
+            if (key === 'weather') navigate('/weather/current');
+            else if (key === 'catalog') navigate('/catalog/products');
+            else navigate(key);
+          }}
         />
       </Sider>
       <Layout className="h-full">
@@ -99,6 +114,8 @@ const MainLayout = () => {
             {selectedKey === '/weather/mock' && 'Mock Weather'}
             {selectedKey === '/weather/slow' && 'Slow Weather'}
             {selectedKey === '/weather/failed' && 'Failed Request'}
+            {selectedKey === '/catalog/products' && 'Products'}
+            {selectedKey === '/catalog/categories' && 'Categories'}
           </Typography.Title>
           <Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
             <div className="flex items-center gap-2 cursor-pointer">

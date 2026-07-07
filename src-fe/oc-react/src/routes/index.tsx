@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Root } from '@/components/Root';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { MainLayout, AuthLayout } from '@/components/layout';
-import { Dashboard, LoginPage, RegisterPage } from '@/pages';
+import { Dashboard, LoginPage, RegisterPage, ProductListPage, CategoryListPage } from '@/pages';
 import { CurrentPage, MockPage, SlowPage, FailedPage } from '@/pages/weather';
 
 export const router = createBrowserRouter([
@@ -21,6 +21,8 @@ export const router = createBrowserRouter([
               { path: 'weather/mock', element: <MockPage /> },
               { path: 'weather/slow', element: <SlowPage /> },
               { path: 'weather/failed', element: <FailedPage /> },
+              { path: 'catalog/products', element: <ProductListPage /> },
+              { path: 'catalog/categories', element: <CategoryListPage /> },
             ],
           },
         ],
