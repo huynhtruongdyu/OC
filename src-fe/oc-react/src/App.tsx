@@ -1,4 +1,4 @@
-import { useWeatherForecast, useMockWeatherForecast } from '@/features';
+import { useWeatherForecast, useMockWeatherForecast, useSlowWeatherForecast, useFailedWeatherForecast } from '@/features';
 
 const Temp = ({ celsius }: { celsius: number }) => (
   <span
@@ -37,13 +37,28 @@ const WeatherTable = ({ title, forecasts }: { title: string; forecasts: { date: 
 const App = () => {
   const { data: current, isLoading: loadingCurrent } = useWeatherForecast();
   const { data: mock, isLoading: loadingMock } = useMockWeatherForecast();
+  const { data: slow, isLoading: loadingSlow } = useSlowWeatherForecast();
+  const { error: failedError, isLoading: loadingFailed } = useFailedWeatherForecast();
 
   return (
-    <div className="content flex gap-8">
-      {loadingCurrent && <p>Loading current...</p>}
-      {current && <WeatherTable title="Current" forecasts={current} />}
-      {loadingMock && <p>Loading mock...</p>}
-      {mock && <WeatherTable title="Mock" forecasts={mock} />}
+    <div className="content flex gap-8 items-start">
+      <div className="flex flex-col gap-8">
+        {loadingCurrent && <p>Loading current...</p>}
+        {current && <WeatherTable title="Current" forecasts={current} />}
+        {loadingMock && <p>Loading mock...</p>}
+        {mock && <WeatherTable title="Mock" forecasts={mock} />}
+        {loadingSlow && <p className="text-yellow-600">Loading slow (5s delay)...</p>}
+        {slow && <WeatherTable title="Slow (5s)" forecasts={slow} />}
+      </div>
+      <div>
+        <h2 className="text-lg font-bold mb-2">Failed Request</h2>
+        {loadingFailed && <p>Loading failed...</p>}
+        {failedError && (
+          <pre className="bg-red-50 border border-red-200 text-red-700 p-3 rounded text-sm whitespace-pre-wrap">
+            {JSON.stringify(failedError, null, 2)}
+          </pre>
+        )}
+      </div>
     </div>
   );
 };

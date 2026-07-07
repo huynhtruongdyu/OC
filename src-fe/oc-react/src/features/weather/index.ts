@@ -1,3 +1,3 @@
-export { getWeatherForecast, getMockWeatherForecast } from './api';
-export { useWeatherForecast, useMockWeatherForecast, weatherKeys } from './hooks';
+export { getWeatherForecast, getMockWeatherForecast, getSlowWeatherForecast, getFailedWeatherForecast } from './api';
+export { useWeatherForecast, useMockWeatherForecast, useSlowWeatherForecast, useFailedWeatherForecast, weatherKeys } from './hooks';
 export type { WeatherForecast } from './types';
