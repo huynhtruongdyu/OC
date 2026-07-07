@@ -1,4 +1,4 @@
-import { useWeatherForecast } from '@/features';
+import { useWeatherForecast, useMockWeatherForecast } from '@/features';
 
 const Temp = ({ celsius }: { celsius: number }) => (
   <span
@@ -10,34 +10,40 @@ const Temp = ({ celsius }: { celsius: number }) => (
   </span>
 );
 
+const WeatherTable = ({ title, forecasts }: { title: string; forecasts: { date: string; temperatureC: number; summary: string | null }[] }) => (
+  <div>
+    <h2 className="text-lg font-bold mb-2">{title}</h2>
+    <table className="w-full max-w-md border-collapse">
+      <thead>
+        <tr className="border-b text-left">
+          <th className="pr-4">Date</th>
+          <th className="pr-4">Temp</th>
+          <th>Summary</th>
+        </tr>
+      </thead>
+      <tbody>
+        {forecasts.map((f) => (
+          <tr key={f.date} className="border-b">
+            <td className="pr-4 py-1">{f.date}</td>
+            <td className="pr-4 py-1"><Temp celsius={f.temperatureC} /></td>
+            <td className="py-1">{f.summary}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
 const App = () => {
-  const { data: forecasts, isLoading } = useWeatherForecast();
+  const { data: current, isLoading: loadingCurrent } = useWeatherForecast();
+  const { data: mock, isLoading: loadingMock } = useMockWeatherForecast();
 
   return (
-    <div className="content">
-      {isLoading && <p>Loading weather...</p>}
-      {forecasts && (
-        <table className="mt-4 w-full max-w-md border-collapse">
-          <thead>
-            <tr className="border-b text-left">
-              <th className="pr-4">Date</th>
-              <th className="pr-4">Temp</th>
-              <th>Summary</th>
-            </tr>
-          </thead>
-          <tbody>
-            {forecasts.map((f) => (
-              <tr key={f.date} className="border-b">
-                <td className="pr-4 py-1">{f.date}</td>
-                <td className="pr-4 py-1">
-                  <Temp celsius={f.temperatureC} />
-                </td>
-                <td className="py-1">{f.summary}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+    <div className="content flex gap-8">
+      {loadingCurrent && <p>Loading current...</p>}
+      {current && <WeatherTable title="Current" forecasts={current} />}
+      {loadingMock && <p>Loading mock...</p>}
+      {mock && <WeatherTable title="Mock" forecasts={mock} />}
     </div>
   );
 };
