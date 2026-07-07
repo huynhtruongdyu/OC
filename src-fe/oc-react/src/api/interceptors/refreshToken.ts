@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { config } from '@/config';
+import { navigate } from '@/lib';
 import type { ApiResponse } from '@/types';
 import type { AuthResponse } from '@/features/auth';
 
@@ -64,7 +65,7 @@ export const onRejected = async (error: {
   } catch (err) {
     processQueue(err, null);
     localStorage.removeItem(AUTH_KEY);
-    window.location.href = '/login';
+    navigate('/login');
     return Promise.reject(err);
   } finally {
     isRefreshing = false;
