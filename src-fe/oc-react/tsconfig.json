@@ -15,6 +15,11 @@
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
 
+    /* path aliases */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
     /* type checking */
     "noUnusedLocals": true,
     "noUnusedParameters": true
