@@ -8,6 +8,8 @@ namespace OC.Bootstrapper.Application;
 public static class ApplicationRegistration {
     public static IServiceCollection AddApplication(this IServiceCollection services) {
         services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoryService, CategoryService>();
 
         return services;
     }
