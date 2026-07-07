@@ -1,3 +1,2 @@
-// Layout components (Header, Sidebar, Footer, PageLayout)
-// Placeholder for future components
-export {};
+export { default as MainLayout } from './MainLayout';
+export { default as AuthLayout } from './AuthLayout';
