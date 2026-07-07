@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { config } from '@/config';
 import { navigate } from '@/lib';
+import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import type { ApiResponse } from '@/types';
 import type { AuthResponse } from '@/features/auth';
 
@@ -21,12 +22,8 @@ const processQueue = (error: unknown, token: string | null) => {
   pendingQueue = [];
 };
 
-export const onRejected = async (error: {
-  response?: { status: number };
-  config?: { _retry?: boolean; url?: string };
-  message: string;
-}) => {
-  const originalRequest = error.config;
+export const onRejected = async (error: AxiosError) => {
+  const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean } | undefined;
 
   if (!originalRequest || error.response?.status !== 401 || originalRequest._retry || originalRequest.url?.includes('/auth/refresh')) {
     return Promise.reject(error);
