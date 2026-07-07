@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 using OC.Bootstrapper.Domain.Identities;
 
 namespace OC.Bootstrapper.Infrastructure.Persistence;
 
-public class AppIdentityDbContext : IdentityDbContext<AppUser, AppRole, Guid>
-{
+public class AppIdentityDbContext : IdentityDbContext<AppUser, AppRole, Guid> {
     public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options) { }
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
+    protected override void OnModelCreating(ModelBuilder builder) {
         ArgumentNullException.ThrowIfNull(builder);
         base.OnModelCreating(builder);
 

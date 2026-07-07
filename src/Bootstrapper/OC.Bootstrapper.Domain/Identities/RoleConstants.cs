@@ -1,7 +1,6 @@
 namespace OC.Bootstrapper.Domain.Identities;
 
-public static class RoleConstants
-{
+public static class RoleConstants {
     public const string SystemAdmin = "SystemAdmin";
     public const string Admin = "Admin";
     public const string User = "User";

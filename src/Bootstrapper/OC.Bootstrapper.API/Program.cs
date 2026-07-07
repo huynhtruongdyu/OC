@@ -5,14 +5,16 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApiDocument();
 builder.Services.AddVersioning();
 builder.Services.AddCorsPolicy(configuration);
+
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(configuration);
-builder.Services.AddIdentityServices();
 
 var app = builder.Build();
 
 app.UseOpenApiUi();
 app.UseCorsPolicy();
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
