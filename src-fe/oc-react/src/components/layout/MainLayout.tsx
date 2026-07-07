@@ -17,7 +17,10 @@ const LoadingBar = () => {
     <div className="fixed top-0 left-0 right-0 z-50 h-1">
       <div
         className="h-full bg-blue-500 transition-all duration-500 ease-out"
-        style={{ width: isFetching ? '100%' : '0%', opacity: isFetching ? 1 : 0 }}
+        style={{
+          width: isFetching ? '100%' : '0%',
+          opacity: isFetching ? 1 : 0,
+        }}
       />
     </div>
   );
@@ -61,12 +64,14 @@ const MainLayout = () => {
           selectedKeys={[selectedKey]}
           defaultOpenKeys={openKeys}
           items={menuItems}
-          onClick={({ key }) => navigate(key === 'weather' ? '/weather/current' : key)}
+          onClick={({ key }) =>
+            navigate(key === 'weather' ? '/weather/current' : key)
+          }
         />
       </Sider>
       <Layout className="h-full">
-        <Header className="bg-[#001529] px-6 flex items-center shrink-0">
-          <Typography.Title level={4} className="m-0 !text-white">
+        <Header style={{ background: '#fff' }} className="px-6 flex items-center shrink-0">
+          <Typography.Title level={4} className="m-0">
             {selectedKey === '/' && 'Dashboard'}
             {selectedKey === '/weather/current' && 'Current Weather'}
             {selectedKey === '/weather/mock' && 'Mock Weather'}
@@ -85,3 +90,4 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
+
