@@ -22,7 +22,7 @@ public sealed class WeatherForecastController : PublicController {
 
     [HttpGet(Name = "GetSlowWeatherForecast")]
     public async Task<ApiResponse<WeatherForecast[]>> Slow([FromQuery] int delayMs = 5000) {
-        await Task.Delay(delayMs).ConfigureAwait(false);
+        await Task.Delay(delayMs);
         var forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast {
             Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
             TemperatureC = Random.Shared.Next(-20, 55),

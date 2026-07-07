@@ -18,6 +18,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-await OC.Bootstrapper.Infrastructure.Persistence.Seed.IdentitySeed.SeedAsync(app.Services).ConfigureAwait(false);
+await OC.Bootstrapper.Infrastructure.Persistence.Seed.IdentitySeed.SeedAsync(app.Services);
 
-await app.RunAsync().ConfigureAwait(false);
+await app.RunAsync();

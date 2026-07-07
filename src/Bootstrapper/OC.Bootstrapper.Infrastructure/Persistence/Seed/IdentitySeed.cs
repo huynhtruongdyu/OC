@@ -13,7 +13,7 @@ public static class IdentitySeed {
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-        await context.Database.MigrateAsync().ConfigureAwait(false);
+        await context.Database.MigrateAsync();
 
         (Guid Id, string Name)[] roles =
         [
@@ -22,12 +22,12 @@ public static class IdentitySeed {
             (RoleConstants.UserId, RoleConstants.User),
         ];
         foreach (var (id, name) in roles) {
-            if (!await roleManager.RoleExistsAsync(name).ConfigureAwait(false)) {
-                await roleManager.CreateAsync(new AppRole { Id = id, Name = name }).ConfigureAwait(false);
+            if (!await roleManager.RoleExistsAsync(name)) {
+                await roleManager.CreateAsync(new AppRole { Id = id, Name = name });
             }
         }
 
-        if (await userManager.FindByEmailAsync("root@oc.com").ConfigureAwait(false) is null) {
+        if (await userManager.FindByEmailAsync("root@oc.com") is null) {
             var root = new AppUser {
                 UserName = "root",
                 Email = "root@oc.com",
@@ -35,9 +35,9 @@ public static class IdentitySeed {
                 EmailConfirmed = true,
             };
 
-            var result = await userManager.CreateAsync(root, "Root@123").ConfigureAwait(false);
+            var result = await userManager.CreateAsync(root, "Root@123");
             if (result.Succeeded) {
-                await userManager.AddToRoleAsync(root, RoleConstants.SystemAdmin).ConfigureAwait(false);
+                await userManager.AddToRoleAsync(root, RoleConstants.SystemAdmin);
             }
         }
     }
