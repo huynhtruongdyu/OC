@@ -57,7 +57,15 @@ const MainLayout = () => {
   const dropdownItems: MenuProps['items'] = [
     { key: 'info', label: user?.displayName, disabled: true },
     { type: 'divider' },
-    { key: 'logout', icon: <LogoutOutlined />, label: 'Logout', onClick: () => { logout(); navigate('/login'); } },
+    {
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      label: 'Logout',
+      onClick: () => {
+        logout();
+        navigate('/login');
+      },
+    },
   ];
 
   return (
@@ -81,7 +89,10 @@ const MainLayout = () => {
         />
       </Sider>
       <Layout className="h-full">
-        <Header style={{ background: '#fff' }} className="px-6 flex items-center justify-between shrink-0">
+        <Header
+          style={{ background: '#fff' }}
+          className="px-6 flex items-center justify-between shrink-0"
+        >
           <Typography.Title level={4} className="m-0">
             {selectedKey === '/' && 'Dashboard'}
             {selectedKey === '/weather/current' && 'Current Weather'}
@@ -92,7 +103,9 @@ const MainLayout = () => {
           <Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
             <div className="flex items-center gap-2 cursor-pointer">
               <Avatar icon={<UserOutlined />} />
-              <span className="text-sm">{user?.displayName} ({user?.roles?.join(', ')})</span>
+              <span className="text-sm">
+                {user?.displayName} ({user?.roles?.join(', ')})
+              </span>
             </div>
           </Dropdown>
         </Header>
@@ -107,4 +120,3 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
-

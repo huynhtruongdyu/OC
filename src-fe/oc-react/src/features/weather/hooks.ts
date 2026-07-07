@@ -1,5 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { getFailedWeatherForecast, getMockWeatherForecast, getSlowWeatherForecast, getWeatherForecast } from './api';
+import {
+  getFailedWeatherForecast,
+  getMockWeatherForecast,
+  getSlowWeatherForecast,
+  getWeatherForecast,
+} from './api';
 
 export const weatherKeys = {
   all: ['weather'] as const,

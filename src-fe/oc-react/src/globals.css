@@ -1,15 +1,20 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
 }
 
 /* Undo Tailwind preflight overrides for Ant Design dark theme */
-.ant-menu-dark, .ant-menu-dark .ant-menu-item, .ant-menu-dark .ant-menu-submenu-title {
+.ant-menu-dark,
+.ant-menu-dark .ant-menu-item,
+.ant-menu-dark .ant-menu-submenu-title {
   color: rgba(255, 255, 255, 0.65);
 }
-.ant-menu-dark .ant-menu-item-selected, .ant-menu-dark .ant-menu-submenu-selected {
+.ant-menu-dark .ant-menu-item-selected,
+.ant-menu-dark .ant-menu-submenu-selected {
   color: #fff;
 }
 .ant-layout-sider .ant-typography {

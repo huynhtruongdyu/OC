@@ -7,9 +7,15 @@ import type { AuthResponse } from '@/features/auth';
 
 const AUTH_KEY = 'oc_auth';
 let isRefreshing = false;
-let pendingQueue: Array<{ resolve: (token: string) => void; reject: (err: unknown) => void }> = [];
+let pendingQueue: Array<{
+  resolve: (token: string) => void;
+  reject: (err: unknown) => void;
+}> = [];
 
-const refreshClient = axios.create({ baseURL: config.env.apiUrl, timeout: 10000 });
+const refreshClient = axios.create({
+  baseURL: config.env.apiUrl,
+  timeout: 10000,
+});
 
 const processQueue = (error: unknown, token: string | null) => {
   for (const { resolve, reject } of pendingQueue) {
@@ -23,9 +29,15 @@ const processQueue = (error: unknown, token: string | null) => {
 };
 
 export const onRejected = async (error: AxiosError) => {
-  const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean } | undefined;
+  const originalRequest = error.config as
+    (InternalAxiosRequestConfig & { _retry?: boolean }) | undefined;
 
-  if (!originalRequest || error.response?.status !== 401 || originalRequest._retry || originalRequest.url?.includes('/auth/refresh')) {
+  if (
+    !originalRequest ||
+    error.response?.status !== 401 ||
+    originalRequest._retry ||
+    originalRequest.url?.includes('/auth/refresh')
+  ) {
     return Promise.reject(error);
   }
 
@@ -48,7 +60,10 @@ export const onRejected = async (error: AxiosError) => {
   isRefreshing = true;
 
   try {
-    const res = await refreshClient.post<ApiResponse<AuthResponse>>('/api/v1/public/auth/refresh', { refreshToken });
+    const res = await refreshClient.post<ApiResponse<AuthResponse>>(
+      '/api/v1/public/auth/refresh',
+      { refreshToken },
+    );
     const data = res.data.data!;
 
     const authData = JSON.parse(localStorage.getItem(AUTH_KEY) || '{}');

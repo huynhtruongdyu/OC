@@ -18,4 +18,3 @@ export const Providers = ({ children }: { children: ReactNode }) => (
     {children}
   </QueryClientProvider>
 );
-

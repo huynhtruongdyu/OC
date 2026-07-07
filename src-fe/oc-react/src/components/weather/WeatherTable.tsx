@@ -9,12 +9,20 @@ const TempTag = ({ celsius }: { celsius: number }) => {
 const columns = [
   { title: 'Date', dataIndex: 'date', key: 'date' },
   {
-    title: 'Temp', dataIndex: 'temperatureC', key: 'temperatureC',
+    title: 'Temp',
+    dataIndex: 'temperatureC',
+    key: 'temperatureC',
     render: (v: number) => <TempTag celsius={v} />,
   },
   { title: 'Summary', dataIndex: 'summary', key: 'summary' },
 ];
 
 export const WeatherTable = ({ data }: { data: WeatherForecast[] }) => (
-  <Table dataSource={data} columns={columns} rowKey="date" pagination={false} size="small" />
+  <Table
+    dataSource={data}
+    columns={columns}
+    rowKey="date"
+    pagination={false}
+    size="small"
+  />
 );

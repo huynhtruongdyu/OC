@@ -12,4 +12,3 @@ export type PaginationInfo = {
   totalCount: number;
   totalPages: number;
 };
-

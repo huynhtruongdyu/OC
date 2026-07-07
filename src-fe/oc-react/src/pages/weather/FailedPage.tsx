@@ -12,7 +12,11 @@ const FailedPage = () => {
           type="error"
           showIcon
           title="Failed Request"
-          description={<pre className="whitespace-pre-wrap mb-0">{JSON.stringify(error, null, 2)}</pre>}
+          description={
+            <pre className="whitespace-pre-wrap mb-0">
+              {JSON.stringify(error, null, 2)}
+            </pre>
+          }
         />
       )}
     </Spin>

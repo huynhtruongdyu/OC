@@ -108,12 +108,12 @@ type ApiResponse<T> = {
 
 ### Interceptors (registered in order)
 
-| Order | Interceptor | Type | Purpose |
-|-------|-------------|------|---------|
-| 1 | `requestTimer` | Request | Records `startTime` in metadata |
-| 2 | `requestLogger` | Request | Logs outgoing method/URL |
-| 3 | `responseLogger` | Response | Logs elapsed time (non-prod only) |
-| 4 | `responseErrorToast` | Response Error | Shows toast + handles 401 |
+| Order | Interceptor          | Type           | Purpose                           |
+| ----- | -------------------- | -------------- | --------------------------------- |
+| 1     | `requestTimer`       | Request        | Records `startTime` in metadata   |
+| 2     | `requestLogger`      | Request        | Logs outgoing method/URL          |
+| 3     | `responseLogger`     | Response       | Logs elapsed time (non-prod only) |
+| 4     | `responseErrorToast` | Response Error | Shows toast + handles 401         |
 
 ### Naming Conventions
 
@@ -135,13 +135,13 @@ export const weatherKeys = {
 
 ### Dependencies
 
-| Package | Purpose |
-|---------|---------|
-| react, react-dom | UI framework |
-| antd, @ant-design/icons | UI component library |
-| @tanstack/react-query | Server state management |
-| react-router-dom | Client-side routing |
-| axios | HTTP client |
-| sonner | Toast notifications |
-| tailwindcss | Utility CSS |
-| rsbuild + plugins | Build tooling |
+| Package                 | Purpose                 |
+| ----------------------- | ----------------------- |
+| react, react-dom        | UI framework            |
+| antd, @ant-design/icons | UI component library    |
+| @tanstack/react-query   | Server state management |
+| react-router-dom        | Client-side routing     |
+| axios                   | HTTP client             |
+| sonner                  | Toast notifications     |
+| tailwindcss             | Utility CSS             |
+| rsbuild + plugins       | Build tooling           |

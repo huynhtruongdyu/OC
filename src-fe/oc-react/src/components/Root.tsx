@@ -4,7 +4,9 @@ import { setNavigate } from '@/lib';
 
 const NavigateSetter = () => {
   const navigate = useNavigate();
-  useEffect(() => { setNavigate(navigate); }, [navigate]);
+  useEffect(() => {
+    setNavigate(navigate);
+  }, [navigate]);
   return null;
 };
 

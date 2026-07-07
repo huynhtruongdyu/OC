@@ -14,7 +14,9 @@ const AUTH_KEY = 'oc_auth';
 const loadAuth = (): AuthState => {
   try {
     const raw = localStorage.getItem(AUTH_KEY);
-    return raw ? JSON.parse(raw) : { token: null, refreshToken: null, user: null };
+    return raw
+      ? JSON.parse(raw)
+      : { token: null, refreshToken: null, user: null };
   } catch {
     return { token: null, refreshToken: null, user: null };
   }
@@ -28,11 +30,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [state]);
 
   const setSession = useCallback((data: AuthResponse) => {
-    setState({ token: data.token, refreshToken: data.refreshToken, user: { email: data.email, displayName: data.displayName, roles: data.roles } });
+    setState({
+      token: data.token,
+      refreshToken: data.refreshToken,
+      user: {
+        email: data.email,
+        displayName: data.displayName,
+        roles: data.roles,
+      },
+    });
   }, []);
 
   const setTokens = useCallback((token: string, refreshToken: string) => {
-    setState(prev => ({ ...prev, token, refreshToken }));
+    setState((prev) => ({ ...prev, token, refreshToken }));
   }, []);
 
   const logout = useCallback(() => {
@@ -40,7 +50,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const value = useMemo(
-    () => ({ ...state, isAuthenticated: !!state.token, setSession, setTokens, logout }),
+    () => ({
+      ...state,
+      isAuthenticated: !!state.token,
+      setSession,
+      setTokens,
+      logout,
+    }),
     [state, setSession, setTokens, logout],
   );
 

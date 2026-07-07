@@ -1,6 +1,8 @@
 import { config } from '@/config';
 
-const noop = (..._args: unknown[]) => { void _args; };
+const noop = (..._args: unknown[]) => {
+  void _args;
+};
 
 export const logger = config.env.enableDebug
   ? {
@@ -17,4 +19,3 @@ export const logger = config.env.enableDebug
       error: noop,
       table: noop,
     };
-

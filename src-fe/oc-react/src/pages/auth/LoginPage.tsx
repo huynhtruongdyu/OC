@@ -32,13 +32,22 @@ const LoginPage = () => {
           <Input.Password prefix={<LockOutlined />} placeholder="Password" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={isPending} block className='mt-2'>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={isPending}
+            block
+            className="mt-2"
+          >
             Sign In
           </Button>
         </Form.Item>
       </Form>
       <div className="text-center text-sm text-gray-500">
-        Don't have an account? <Link to="/register" className="text-blue-600">Register</Link>
+        Don't have an account?{' '}
+        <Link to="/register" className="text-blue-600">
+          Register
+        </Link>
       </div>
     </div>
   );

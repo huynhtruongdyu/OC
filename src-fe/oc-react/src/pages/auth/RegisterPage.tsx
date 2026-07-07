@@ -9,7 +9,11 @@ const RegisterPage = () => {
   const { setSession } = useAuth();
   const { mutate, isPending } = useRegister();
 
-  const onFinish = (values: { displayName: string; email: string; password: string }) => {
+  const onFinish = (values: {
+    displayName: string;
+    email: string;
+    password: string;
+  }) => {
     mutate(values, {
       onSuccess: (data) => {
         setSession(data);
@@ -25,23 +29,44 @@ const RegisterPage = () => {
         Create Account
       </Typography.Title>
       <Form layout="vertical" onFinish={onFinish} size="large">
-        <Form.Item name="displayName" label="Display Name" rules={[{ required: true }]}>
+        <Form.Item
+          name="displayName"
+          label="Display Name"
+          rules={[{ required: true }]}
+        >
           <Input prefix={<UserOutlined />} placeholder="Display Name" />
         </Form.Item>
-        <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
+        <Form.Item
+          name="email"
+          label="Email"
+          rules={[{ required: true, type: 'email' }]}
+        >
           <Input prefix={<MailOutlined />} placeholder="Email" />
         </Form.Item>
-        <Form.Item name="password" label="Password" rules={[{ required: true, min: 6 }]}>
+        <Form.Item
+          name="password"
+          label="Password"
+          rules={[{ required: true, min: 6 }]}
+        >
           <Input.Password prefix={<LockOutlined />} placeholder="Password" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={isPending} block className='mt-2'>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={isPending}
+            block
+            className="mt-2"
+          >
             Register
           </Button>
         </Form.Item>
       </Form>
       <div className="text-center text-sm text-gray-500">
-        Already have an account? <Link to="/login" className="text-blue-600">Sign In</Link>
+        Already have an account?{' '}
+        <Link to="/login" className="text-blue-600">
+          Sign In
+        </Link>
       </div>
     </div>
   );
