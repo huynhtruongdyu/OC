@@ -63,8 +63,8 @@ const MainLayout = () => {
 
   const selectedKey = location.pathname === '/' ? '/' : location.pathname;
   const openKeys = [
-    ...(location.pathname.startsWith('/weather') ? ['weather'] as const : []),
-    ...(location.pathname.startsWith('/catalog') ? ['catalog'] as const : []),
+    ...(location.pathname.startsWith('/weather') ? (['weather'] as const) : []),
+    ...(location.pathname.startsWith('/catalog') ? (['catalog'] as const) : []),
   ];
 
   const dropdownItems: MenuProps['items'] = [

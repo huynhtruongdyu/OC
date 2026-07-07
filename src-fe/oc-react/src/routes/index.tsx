@@ -2,7 +2,13 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Root } from '@/components/Root';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { MainLayout, AuthLayout } from '@/components/layout';
-import { Dashboard, LoginPage, RegisterPage, ProductListPage, CategoryListPage } from '@/pages';
+import {
+  Dashboard,
+  LoginPage,
+  RegisterPage,
+  ProductListPage,
+  CategoryListPage,
+} from '@/pages';
 import { CurrentPage, MockPage, SlowPage, FailedPage } from '@/pages/weather';
 
 export const router = createBrowserRouter([

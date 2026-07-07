@@ -27,6 +27,15 @@ export type DataTableProps<T> = {
   toolbar?: ReactNode;
 };
 
+const matchRecord = <T extends object>(record: T, query: string): boolean => {
+  if (!query) return true;
+  const lower = query.toLowerCase();
+  return Object.values(record).some((v) => {
+    if (v == null) return false;
+    return String(v).toLowerCase().includes(lower);
+  });
+};
+
 export const DataTable = <T extends object>({
   columns,
   data,
@@ -40,16 +49,28 @@ export const DataTable = <T extends object>({
   onSearchChange,
   toolbar,
 }: DataTableProps<T>) => {
+  const isServerSide = !!onSearchChange;
   const [searchText, setSearchText] = useState('');
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
+  const filteredData = useMemo(
+    () =>
+      isServerSide ? data : data.filter((r) => matchRecord(r, searchText)),
+    [data, searchText, isServerSide],
+  );
+
   const handleSearch = useCallback(
-    (value: string) => {
+    (value: string, immediate?: boolean) => {
       setSearchText(value);
+      if (!isServerSide) return;
       clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(() => onSearchChange?.(value), 300);
+      if (immediate) {
+        onSearchChange(value);
+      } else {
+        debounceRef.current = setTimeout(() => onSearchChange(value), 300);
+      }
     },
-    [onSearchChange],
+    [isServerSide, onSearchChange],
   );
 
   const antColumns = useMemo(
@@ -74,7 +95,12 @@ export const DataTable = <T extends object>({
       onPageChange?.(pagination.current ?? 1, pagination.pageSize ?? pageSize);
       if (onSort && !Array.isArray(sorter)) {
         const field = sorter.columnKey as string | undefined;
-        const order = sorter.order === 'ascend' ? 'asc' : sorter.order === 'descend' ? 'desc' : null;
+        const order =
+          sorter.order === 'ascend'
+            ? 'asc'
+            : sorter.order === 'descend'
+              ? 'desc'
+              : null;
         if (field) onSort(field, order);
       }
     },
@@ -89,19 +115,19 @@ export const DataTable = <T extends object>({
           placeholder="Search..."
           value={searchText}
           onChange={(e) => handleSearch(e.target.value)}
-          onSearch={onSearchChange}
+          onSearch={(value) => handleSearch(value, true)}
           className="max-w-xs"
         />
         {toolbar}
       </div>
       <Table<T>
         columns={antColumns}
-        dataSource={data}
+        dataSource={filteredData}
         rowKey={rowKey}
         loading={loading}
         onChange={handleTableChange}
         pagination={
-          onPageChange
+          isServerSide
             ? {
                 current: page ?? 1,
                 pageSize,
@@ -109,7 +135,11 @@ export const DataTable = <T extends object>({
                 showSizeChanger: true,
                 showTotal: (t) => `${t} items`,
               }
-            : { pageSize, showSizeChanger: true, showTotal: (t) => `${t} items` }
+            : {
+                pageSize,
+                showSizeChanger: true,
+                showTotal: (t) => `${t} items`,
+              }
         }
         size="middle"
         scroll={{ x: 'max-content' }}

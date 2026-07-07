@@ -8,7 +8,11 @@ import {
   useUpdateCategory,
   useDeleteCategory,
 } from '@/features';
-import type { Category, CategoryCreateRequest, CategoryUpdateRequest } from '@/features';
+import type {
+  Category,
+  CategoryCreateRequest,
+  CategoryUpdateRequest,
+} from '@/features';
 
 type FormValues = {
   name: string;
@@ -52,7 +56,10 @@ const CategoryListPage = () => {
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       if (editingCategory) {
-        await updateCategory({ id: editingCategory.id, data: values as CategoryUpdateRequest });
+        await updateCategory({
+          id: editingCategory.id,
+          data: values as CategoryUpdateRequest,
+        });
       } else {
         await createCategory(values as CategoryCreateRequest);
       }
@@ -77,9 +84,16 @@ const CategoryListPage = () => {
         key: 'actions',
         render: (_, record) => (
           <div className="flex gap-2">
-            <Button size="small" onClick={() => openEdit(record)}>Edit</Button>
-            <Popconfirm title="Delete this category?" onConfirm={() => handleDelete(record.id)}>
-              <Button size="small" danger>Delete</Button>
+            <Button size="small" onClick={() => openEdit(record)}>
+              Edit
+            </Button>
+            <Popconfirm
+              title="Delete this category?"
+              onConfirm={() => handleDelete(record.id)}
+            >
+              <Button size="small" danger>
+                Delete
+              </Button>
             </Popconfirm>
           </div>
         ),
@@ -97,7 +111,11 @@ const CategoryListPage = () => {
         data={categories ?? []}
         rowKey="id"
         loading={isLoading}
-        toolbar={<Button type="primary" onClick={openCreate}>Add Category</Button>}
+        toolbar={
+          <Button type="primary" onClick={openCreate}>
+            Add Category
+          </Button>
+        }
       />
 
       <Modal
@@ -107,7 +125,12 @@ const CategoryListPage = () => {
         onCancel={closeModal}
         destroyOnClose
       >
-        <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off">
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          autoComplete="off"
+        >
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>

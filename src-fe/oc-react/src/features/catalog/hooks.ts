@@ -27,7 +27,11 @@ export const useProducts = () =>
   useQuery({ queryKey: catalogKeys.products(), queryFn: getProducts });
 
 export const useProduct = (id: string) =>
-  useQuery({ queryKey: catalogKeys.product(id), queryFn: () => getProduct(id), enabled: !!id });
+  useQuery({
+    queryKey: catalogKeys.product(id),
+    queryFn: () => getProduct(id),
+    enabled: !!id,
+  });
 
 export const useCreateProduct = () => {
   const qc = useQueryClient();
@@ -43,8 +47,13 @@ export const useCreateProduct = () => {
 export const useUpdateProduct = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Parameters<typeof updateProduct>[1] }) =>
-      updateProduct(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Parameters<typeof updateProduct>[1];
+    }) => updateProduct(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: catalogKeys.products() });
       showToast.success('Product updated');
@@ -69,7 +78,11 @@ export const useCategories = () =>
   useQuery({ queryKey: catalogKeys.categories(), queryFn: getCategories });
 
 export const useCategory = (id: string) =>
-  useQuery({ queryKey: catalogKeys.category(id), queryFn: () => getCategory(id), enabled: !!id });
+  useQuery({
+    queryKey: catalogKeys.category(id),
+    queryFn: () => getCategory(id),
+    enabled: !!id,
+  });
 
 export const useCreateCategory = () => {
   const qc = useQueryClient();
@@ -85,8 +98,13 @@ export const useCreateCategory = () => {
 export const useUpdateCategory = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Parameters<typeof updateCategory>[1] }) =>
-      updateCategory(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Parameters<typeof updateCategory>[1];
+    }) => updateCategory(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: catalogKeys.categories() });
       showToast.success('Category updated');

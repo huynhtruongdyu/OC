@@ -1,5 +1,14 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Button, Form, Input, InputNumber, Modal, Popconfirm, Select, Typography } from 'antd';
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Popconfirm,
+  Select,
+  Typography,
+} from 'antd';
 import { DataTable } from '@/components/ui';
 import type { DataTableColumn } from '@/components/ui';
 import {
@@ -9,7 +18,11 @@ import {
   useUpdateProduct,
   useDeleteProduct,
 } from '@/features';
-import type { Product, ProductCreateRequest, ProductUpdateRequest } from '@/features';
+import type {
+  Product,
+  ProductCreateRequest,
+  ProductUpdateRequest,
+} from '@/features';
 
 type FormValues = {
   name: string;
@@ -58,7 +71,10 @@ const ProductListPage = () => {
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       if (editingProduct) {
-        await updateProduct({ id: editingProduct.id, data: values as ProductUpdateRequest });
+        await updateProduct({
+          id: editingProduct.id,
+          data: values as ProductUpdateRequest,
+        });
       } else {
         await createProduct(values as ProductCreateRequest);
       }
@@ -78,16 +94,28 @@ const ProductListPage = () => {
     () => [
       { title: 'Name', dataIndex: 'name', sortable: true },
       { title: 'Description', dataIndex: 'description' },
-      { title: 'Price', dataIndex: 'price', sortable: true, render: (v) => `$${(v as number).toFixed(2)}` },
+      {
+        title: 'Price',
+        dataIndex: 'price',
+        sortable: true,
+        render: (v) => `$${(v as number).toFixed(2)}`,
+      },
       { title: 'Category', dataIndex: 'categoryName', sortable: true },
       {
         title: 'Actions',
         key: 'actions',
         render: (_, record) => (
           <div className="flex gap-2">
-            <Button size="small" onClick={() => openEdit(record)}>Edit</Button>
-            <Popconfirm title="Delete this product?" onConfirm={() => handleDelete(record.id)}>
-              <Button size="small" danger>Delete</Button>
+            <Button size="small" onClick={() => openEdit(record)}>
+              Edit
+            </Button>
+            <Popconfirm
+              title="Delete this product?"
+              onConfirm={() => handleDelete(record.id)}
+            >
+              <Button size="small" danger>
+                Delete
+              </Button>
             </Popconfirm>
           </div>
         ),
@@ -110,7 +138,11 @@ const ProductListPage = () => {
         data={products ?? []}
         rowKey="id"
         loading={isLoading}
-        toolbar={<Button type="primary" onClick={openCreate}>Add Product</Button>}
+        toolbar={
+          <Button type="primary" onClick={openCreate}>
+            Add Product
+          </Button>
+        }
       />
 
       <Modal
@@ -120,7 +152,12 @@ const ProductListPage = () => {
         onCancel={closeModal}
         destroyOnClose
       >
-        <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off">
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          autoComplete="off"
+        >
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
@@ -130,7 +167,11 @@ const ProductListPage = () => {
           <Form.Item name="price" label="Price" rules={[{ required: true }]}>
             <InputNumber className="w-full" min={0} precision={2} prefix="$" />
           </Form.Item>
-          <Form.Item name="categoryId" label="Category" rules={[{ required: true }]}>
+          <Form.Item
+            name="categoryId"
+            label="Category"
+            rules={[{ required: true }]}
+          >
             <Select options={categoryOptions} placeholder="Select category" />
           </Form.Item>
         </Form>
