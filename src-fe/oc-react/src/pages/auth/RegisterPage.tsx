@@ -11,6 +11,7 @@ const RegisterPage = () => {
 
   const onFinish = (values: {
     displayName: string;
+    username: string;
     email: string;
     password: string;
   }) => {
@@ -31,21 +32,24 @@ const RegisterPage = () => {
       <Form layout="vertical" onFinish={onFinish} size="large">
         <Form.Item
           name="displayName"
-          label="Display Name"
           rules={[{ required: true }]}
         >
           <Input prefix={<UserOutlined />} placeholder="Display Name" />
         </Form.Item>
         <Form.Item
+          name="username"
+          rules={[{ required: true }]}
+        >
+          <Input prefix={<UserOutlined />} placeholder="Username" />
+        </Form.Item>
+        <Form.Item
           name="email"
-          label="Email"
           rules={[{ required: true, type: 'email' }]}
         >
           <Input prefix={<MailOutlined />} placeholder="Email" />
         </Form.Item>
         <Form.Item
           name="password"
-          label="Password"
           rules={[{ required: true, min: 6 }]}
         >
           <Input.Password prefix={<LockOutlined />} placeholder="Password" />

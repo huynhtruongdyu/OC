@@ -6,5 +6,6 @@ public sealed record AuthResponse(
     string Email,
     string DisplayName,
     IReadOnlyList<string> Roles,
-    IReadOnlyList<string> Permissions
+    IReadOnlyList<string> Permissions,
+    string Username
 );

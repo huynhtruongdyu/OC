@@ -18,6 +18,8 @@ export type AuthContextType = AuthState & {
   setTokens: (token: string, refreshToken: string) => void;
   logout: () => void;
   can: (permission: string) => boolean;
+  hasRole: (role: string) => boolean;
+  hasAnyRole: (roleList: string[]) => boolean;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);

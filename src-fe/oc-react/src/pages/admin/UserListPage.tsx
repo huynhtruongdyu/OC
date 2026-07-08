@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { usePermissions } from '@/hooks/usePermissions';
 import {
   Button,
   Form,
@@ -9,7 +10,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import { DataTable, PermissionModal } from '@/components/ui';
+import { DataTable, PermissionModal, ProtectedButton } from '@/components/ui';
 import type { DataTableColumn } from '@/components/ui';
 import {
   useUsers,
@@ -39,6 +40,8 @@ const UserListPage = () => {
   const { mutateAsync: createUser } = useCreateUser();
   const { mutateAsync: updateUser } = useUpdateUser();
   const { mutateAsync: deleteUser } = useDeleteUser();
+
+  const { hasPermission, hasRole } = usePermissions();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
@@ -156,19 +159,19 @@ const UserListPage = () => {
         key: 'actions',
         render: (_, record) => (
           <div className="flex gap-2">
-            <Button size="small" onClick={() => openEdit(record)}>
+            <ProtectedButton size="small" permission="users.edit" onClick={() => openEdit(record)}>
               Edit
-            </Button>
-            <Button size="small" onClick={() => openChangePassword(record)}>
+            </ProtectedButton>
+            <ProtectedButton size="small" permission="users.changePassword" onClick={() => openChangePassword(record)}>
               Change Password
-            </Button>
+            </ProtectedButton>
             <Popconfirm
               title="Delete this user?"
               onConfirm={() => handleDelete(record.id)}
             >
-              <Button size="small" danger>
+              <ProtectedButton size="small" permission="users.delete" danger>
                 Delete
-              </Button>
+              </ProtectedButton>
             </Popconfirm>
           </div>
         ),
@@ -186,9 +189,9 @@ const UserListPage = () => {
         rowKey="id"
         loading={isLoading}
         toolbar={
-          <Button type="primary" onClick={openCreate}>
+          <ProtectedButton type="primary" permission="users.create" onClick={openCreate}>
             Add User
-          </Button>
+          </ProtectedButton>
         }
       />
 
@@ -227,18 +230,6 @@ const UserListPage = () => {
           >
             <Input />
           </Form.Item>
-          {!editingUser && (
-            <Form.Item
-              name="password"
-              label="Password"
-              rules={[
-                { required: true },
-                { min: 6, message: 'Password must be at least 6 characters' },
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
-          )}
           <Form.Item name="roles" label="Roles">
             <Select
               mode="multiple"
@@ -247,11 +238,11 @@ const UserListPage = () => {
             />
           </Form.Item>
           <Form.Item label="Direct Permissions">
-            <Button onClick={() => setPermModalOpen(true)}>
+            <ProtectedButton onClick={() => setPermModalOpen(true)} permission="users.managePermissions">
               {selectedPerms.length > 0
                 ? `Permissions (${selectedPerms.length} selected)`
                 : 'Select permissions'}
-            </Button>
+            </ProtectedButton>
           </Form.Item>
         </Form>
       </Modal>

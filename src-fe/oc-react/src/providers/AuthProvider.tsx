@@ -62,6 +62,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     [state.user?.permissions],
   );
 
+  const hasRole = useCallback(
+    (role: string) => state.user?.roles?.includes(role) ?? false,
+    [state.user?.roles],
+  );
+
+  const hasAnyRole = useCallback(
+    (roleList: string[]) => roleList.some((role) => state.user?.roles?.includes(role)),
+    [state.user?.roles],
+  );
+
   const value = useMemo(
     () => ({
       ...state,
@@ -70,8 +80,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setTokens,
       logout,
       can,
+      hasRole,
+      hasAnyRole,
     }),
-    [state, setSession, setTokens, logout, can],
+    [state, setSession, setTokens, logout, can, hasRole, hasAnyRole],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

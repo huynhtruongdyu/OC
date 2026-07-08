@@ -14,7 +14,7 @@ const queryClient = new QueryClient({
 
 export const Providers = ({ children }: { children: ReactNode }) => (
   <QueryClientProvider client={queryClient}>
-    <Toaster richColors position="bottom-right" />
+    <Toaster richColors position="bottom-center" />
     {children}
   </QueryClientProvider>
 );

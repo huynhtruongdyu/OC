@@ -9,7 +9,7 @@ import {
   Select,
   Typography,
 } from 'antd';
-import { DataTable } from '@/components/ui';
+import { DataTable, ProtectedButton } from '@/components/ui';
 import type { DataTableColumn } from '@/components/ui';
 import {
   useProducts,
@@ -106,16 +106,20 @@ const ProductListPage = () => {
         key: 'actions',
         render: (_, record) => (
           <div className="flex gap-2">
-            <Button size="small" onClick={() => openEdit(record)}>
+            <ProtectedButton
+              size="small"
+              permission="products.edit"
+              onClick={() => openEdit(record)}
+            >
               Edit
-            </Button>
+            </ProtectedButton>
             <Popconfirm
               title="Delete this product?"
               onConfirm={() => handleDelete(record.id)}
             >
-              <Button size="small" danger>
+              <ProtectedButton size="small" permission="products.delete" danger>
                 Delete
-              </Button>
+              </ProtectedButton>
             </Popconfirm>
           </div>
         ),

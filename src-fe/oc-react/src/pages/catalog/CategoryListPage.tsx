@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Input, Modal, Popconfirm, Typography } from 'antd';
-import { DataTable } from '@/components/ui';
+import { DataTable, ProtectedButton } from '@/components/ui';
 import type { DataTableColumn } from '@/components/ui';
 import {
   useCategories,
@@ -84,16 +84,20 @@ const CategoryListPage = () => {
         key: 'actions',
         render: (_, record) => (
           <div className="flex gap-2">
-            <Button size="small" onClick={() => openEdit(record)}>
+            <ProtectedButton
+              size="small"
+              permission="categories.edit"
+              onClick={() => openEdit(record)}
+            >
               Edit
-            </Button>
+            </ProtectedButton>
             <Popconfirm
               title="Delete this category?"
               onConfirm={() => handleDelete(record.id)}
             >
-              <Button size="small" danger>
+              <ProtectedButton size="small" permission="categories.delete" danger>
                 Delete
-              </Button>
+              </ProtectedButton>
             </Popconfirm>
           </div>
         ),

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 using OC.Bootstrapper.API.DTOs.Auth;
 using OC.Bootstrapper.Application.Abstractions.Services;
 using OC.Bootstrapper.Domain.Identities;
@@ -11,7 +12,6 @@ public sealed class AuthController(
     SignInManager<AppUser> signInManager,
     IJwtService jwtService,
     IPermissionService permissionService) : PublicController {
-
     [HttpPost]
     public async Task<ApiResponse<AuthResponse>> Login([FromBody] LoginRequest request, CancellationToken ct) {
         var user = await userManager.FindByNameAsync(request.Username);
@@ -33,12 +33,12 @@ public sealed class AuthController(
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         await userManager.UpdateAsync(user);
 
-        return ApiResponse.Ok(new AuthResponse(accessToken, refreshToken, user.Email ?? string.Empty, user.DisplayName, [.. roles], [.. permissions]));
+        return ApiResponse.Ok(new AuthResponse(accessToken, refreshToken, user.Email ?? string.Empty, user.DisplayName, [.. roles], [.. permissions], user.UserName ?? string.Empty));
     }
 
     [HttpPost]
     public async Task<ApiResponse<AuthResponse>> Register([FromBody] RegisterRequest request, CancellationToken ct) {
-        var existing = await userManager.FindByNameAsync(request.DisplayName);
+        var existing = await userManager.FindByNameAsync(request.Username);
         if (existing is not null) {
             return ApiResponse.Fail<AuthResponse>("Username already taken.");
         }
@@ -49,7 +49,7 @@ public sealed class AuthController(
         }
 
         var user = new AppUser {
-            UserName = request.DisplayName,
+            UserName = request.Username,
             Email = request.Email,
             DisplayName = request.DisplayName,
         };
@@ -74,13 +74,13 @@ public sealed class AuthController(
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         await userManager.UpdateAsync(user);
 
-        return ApiResponse.Ok(new AuthResponse(accessToken, refreshToken, user.Email ?? string.Empty, user.DisplayName, [.. roles], [.. permissions]));
+        return ApiResponse.Ok(new AuthResponse(accessToken, refreshToken, user.Email ?? string.Empty, user.DisplayName, [.. roles], [.. permissions], user.UserName ?? string.Empty));
     }
 
     [HttpPost]
     public async Task<ApiResponse<AuthResponse>> Refresh([FromBody] RefreshRequest request, CancellationToken ct) {
         if (string.IsNullOrWhiteSpace(request.RefreshToken)) {
-            return ApiResponse.Fail<AuthResponse>("Invalid refresh token.");
+            return ApiResponse.Fail<AuthResponse>("Invalid or expired refresh token.");
         }
 
         var users = userManager.Users.Where(u => u.RefreshToken == request.RefreshToken).ToList();
@@ -99,6 +99,6 @@ public sealed class AuthController(
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         await userManager.UpdateAsync(user);
 
-        return ApiResponse.Ok(new AuthResponse(accessToken, newRefreshToken, user.Email ?? string.Empty, user.DisplayName, [.. roles], [.. permissions]));
+        return ApiResponse.Ok(new AuthResponse(accessToken, newRefreshToken, user.Email ?? string.Empty, user.DisplayName, [.. roles], [.. permissions], user.UserName ?? string.Empty));
     }
 }

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Input, Modal, Popconfirm, Typography } from 'antd';
-import { DataTable, PermissionModal } from '@/components/ui';
+import { DataTable, PermissionModal, ProtectedButton } from '@/components/ui';
 import type { DataTableColumn } from '@/components/ui';
 import {
   roleService,
@@ -105,19 +105,19 @@ const RoleListPage = () => {
         key: 'actions',
         render: (_, record) => (
           <div className="flex gap-2">
-            <Button size="small" onClick={() => openPermModal(record)}>
+            <ProtectedButton size="small" onClick={() => openPermModal(record)} permission="roles.managePermissions">
               Permissions
-            </Button>
-            <Button size="small" onClick={() => openEdit(record)}>
+            </ProtectedButton>
+            <ProtectedButton size="small" onClick={() => openEdit(record)} permission="roles.edit">
               Edit
-            </Button>
+            </ProtectedButton>
             <Popconfirm
               title="Delete this role?"
               onConfirm={() => handleDelete(record.id)}
             >
-              <Button size="small" danger>
+              <ProtectedButton size="small" danger permission="roles.delete">
                 Delete
-              </Button>
+              </ProtectedButton>
             </Popconfirm>
           </div>
         ),
@@ -135,9 +135,9 @@ const RoleListPage = () => {
         rowKey="id"
         loading={isLoading}
         toolbar={
-          <Button type="primary" onClick={openCreate}>
+          <ProtectedButton type="primary" permission="roles.create" onClick={openCreate}>
             Add Role
-          </Button>
+          </ProtectedButton>
         }
       />
       <Modal
