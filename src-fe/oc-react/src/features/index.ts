@@ -42,3 +42,28 @@ export type {
   CategoryCreateRequest,
   CategoryUpdateRequest,
 } from './catalog';
+
+export {
+  useUsers,
+  useUser,
+  useCreateUser,
+  useUpdateUser,
+  useDeleteUser,
+  useUserPermissions,
+  useUpdateUserPermissions,
+  useRoles,
+  useRole,
+  useCreateRole,
+  useUpdateRole,
+  useDeleteRole,
+  useRolePermissions,
+  useUpdateRolePermissions,
+  usePermissionGroups,
+  adminKeys,
+} from './admin';
+export type {
+  AdminUser,
+  AdminRole,
+  RoleDetail,
+  PermissionGroup,
+} from './admin';

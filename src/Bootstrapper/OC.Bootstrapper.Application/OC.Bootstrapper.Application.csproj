@@ -11,6 +11,7 @@
     <ProjectReference Include="..\OC.Bootstrapper.Shared\OC.Bootstrapper.Shared.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\OC.BuildingBlocks.SharedKernel\OC.BuildingBlocks.SharedKernel.csproj" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" />
   </ItemGroup>
 
 </Project>

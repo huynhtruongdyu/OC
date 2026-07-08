@@ -8,6 +8,10 @@ import {
   RegisterPage,
   ProductListPage,
   CategoryListPage,
+  UserListPage,
+  RoleListPage,
+  RoleFormPage,
+  PermissionMatrixPage,
 } from '@/pages';
 import { CurrentPage, MockPage, SlowPage, FailedPage } from '@/pages/weather';
 
@@ -29,6 +33,10 @@ export const router = createBrowserRouter([
               { path: 'weather/failed', element: <FailedPage /> },
               { path: 'catalog/products', element: <ProductListPage /> },
               { path: 'catalog/categories', element: <CategoryListPage /> },
+              { path: 'admin/users', element: <UserListPage /> },
+              { path: 'admin/roles', element: <RoleListPage /> },
+              { path: 'admin/roles/:id', element: <RoleFormPage /> },
+              { path: 'admin/permissions', element: <PermissionMatrixPage /> },
             ],
           },
         ],

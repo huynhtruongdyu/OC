@@ -9,7 +9,9 @@ namespace OC.Bootstrapper.API.Controllers;
 public sealed class AuthController(
     UserManager<AppUser> userManager,
     SignInManager<AppUser> signInManager,
-    IJwtService jwtService) : PublicController {
+    IJwtService jwtService,
+    IPermissionService permissionService) : PublicController {
+
     [HttpPost]
     public async Task<ApiResponse<AuthResponse>> Login([FromBody] LoginRequest request, CancellationToken ct) {
         var user = await userManager.FindByNameAsync(request.Username);
@@ -23,14 +25,15 @@ public sealed class AuthController(
         }
 
         var roles = await userManager.GetRolesAsync(user);
-        var accessToken = jwtService.GenerateAccessToken(user, roles);
+        var permissions = await permissionService.GetUserPermissionsAsync(user);
+        var accessToken = jwtService.GenerateAccessToken(user, roles, permissions);
         var refreshToken = jwtService.GenerateRefreshToken();
 
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         await userManager.UpdateAsync(user);
 
-        return ApiResponse.Ok(new AuthResponse(accessToken, refreshToken, user.Email ?? string.Empty, user.DisplayName, roles));
+        return ApiResponse.Ok(new AuthResponse(accessToken, refreshToken, user.Email ?? string.Empty, user.DisplayName, [.. roles], [.. permissions]));
     }
 
     [HttpPost]
@@ -63,14 +66,15 @@ public sealed class AuthController(
         await userManager.AddToRoleAsync(user, RoleConstants.User);
 
         var roles = await userManager.GetRolesAsync(user);
-        var accessToken = jwtService.GenerateAccessToken(user, roles);
+        var permissions = await permissionService.GetUserPermissionsAsync(user);
+        var accessToken = jwtService.GenerateAccessToken(user, roles, permissions);
         var refreshToken = jwtService.GenerateRefreshToken();
 
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         await userManager.UpdateAsync(user);
 
-        return ApiResponse.Ok(new AuthResponse(accessToken, refreshToken, user.Email ?? string.Empty, user.DisplayName, roles));
+        return ApiResponse.Ok(new AuthResponse(accessToken, refreshToken, user.Email ?? string.Empty, user.DisplayName, [.. roles], [.. permissions]));
     }
 
     [HttpPost]
@@ -87,13 +91,14 @@ public sealed class AuthController(
         }
 
         var roles = await userManager.GetRolesAsync(user);
-        var accessToken = jwtService.GenerateAccessToken(user, roles);
+        var permissions = await permissionService.GetUserPermissionsAsync(user);
+        var accessToken = jwtService.GenerateAccessToken(user, roles, permissions);
         var newRefreshToken = jwtService.GenerateRefreshToken();
 
         user.RefreshToken = newRefreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         await userManager.UpdateAsync(user);
 
-        return ApiResponse.Ok(new AuthResponse(accessToken, newRefreshToken, user.Email ?? string.Empty, user.DisplayName, roles));
+        return ApiResponse.Ok(new AuthResponse(accessToken, newRefreshToken, user.Email ?? string.Empty, user.DisplayName, [.. roles], [.. permissions]));
     }
 }

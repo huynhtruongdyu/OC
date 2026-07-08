@@ -4,7 +4,9 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+
 using OC.Bootstrapper.Application.Abstractions.Services;
+using OC.Bootstrapper.Domain.Authorization;
 using OC.Bootstrapper.Domain.Identities;
 
 namespace OC.Bootstrapper.Application.Services;
@@ -18,7 +20,7 @@ public sealed class JwtOptions {
 }
 
 public sealed class JwtService(IOptions<JwtOptions> options) : IJwtService {
-    public string GenerateAccessToken(AppUser user, IList<string> roles) {
+    public string GenerateAccessToken(AppUser user, IList<string> roles, IReadOnlyList<string> permissions) {
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -27,6 +29,7 @@ public sealed class JwtService(IOptions<JwtOptions> options) : IJwtService {
         };
 
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+        claims.AddRange(permissions.Select(perm => new Claim(AppPermissions.ClaimType, perm)));
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.SecretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -44,5 +47,4 @@ public sealed class JwtService(IOptions<JwtOptions> options) : IJwtService {
     public string GenerateRefreshToken() {
         return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
     }
-
 }

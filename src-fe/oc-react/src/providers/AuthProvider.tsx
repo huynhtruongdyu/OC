@@ -6,7 +6,7 @@ import { AuthContext } from './AuthContext';
 type AuthState = {
   token: string | null;
   refreshToken: string | null;
-  user: { email: string; displayName: string; roles: string[] } | null;
+  user: { email: string; displayName: string; roles: string[]; permissions: string[] } | null;
 };
 
 const AUTH_KEY = 'oc_auth';
@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         email: data.email,
         displayName: data.displayName,
         roles: data.roles,
+        permissions: data.permissions,
       },
     });
   }, []);
@@ -50,6 +51,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem(AUTH_KEY);
   }, []);
 
+  const can = useCallback(
+    (permission: string) => state.user?.permissions?.includes(permission) ?? false,
+    [state.user?.permissions],
+  );
+
   const value = useMemo(
     () => ({
       ...state,
@@ -57,8 +63,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession,
       setTokens,
       logout,
+      can,
     }),
-    [state, setSession, setTokens, logout],
+    [state, setSession, setTokens, logout, can],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

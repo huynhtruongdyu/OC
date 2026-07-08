@@ -18,3 +18,11 @@ export const refresh = (refreshToken: string) =>
       refreshToken,
     })
     .then((res) => res.data.data!);
+
+export const changePassword = (currentPassword: string, newPassword: string) =>
+  api
+    .post<ApiResponse<object>>('/api/v1/profile/change-password', {
+      currentPassword,
+      newPassword,
+    })
+    .then((res) => res.data);

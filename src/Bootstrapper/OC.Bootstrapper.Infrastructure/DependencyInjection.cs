@@ -1,16 +1,20 @@
 using System.Text;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
+using OC.Bootstrapper.Application.Abstractions.Authorization;
 using OC.Bootstrapper.Application.Abstractions.Repositories;
+using OC.Bootstrapper.Application.Abstractions.Services;
 using OC.Bootstrapper.Application.Services;
 using OC.Bootstrapper.Domain.Identities;
 using OC.Bootstrapper.Infrastructure.Persistence;
 using OC.Bootstrapper.Infrastructure.Persistence.Repositories;
+using OC.Bootstrapper.Infrastructure.Services;
 
 namespace OC.Bootstrapper.Infrastructure;
 
@@ -25,6 +29,10 @@ public static class InfrastructureRegistration {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
+
+        services.AddScoped<IPermissionService, PermissionService>();
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
         services.AddIdentity<AppUser, AppRole>()
             .AddEntityFrameworkStores<AppIdentityDbContext>();
