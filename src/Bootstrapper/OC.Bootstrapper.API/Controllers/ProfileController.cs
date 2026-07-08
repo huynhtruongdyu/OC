@@ -1,17 +1,13 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OC.Bootstrapper.API.Controllers.Base;
 using OC.Bootstrapper.API.DTOs.Auth;
 using OC.Bootstrapper.Domain.Identities;
 
 namespace OC.Bootstrapper.API.Controllers;
 
-[ApiController]
-[Authorize]
-[ApiVersion("1.0")]
-[Route("api/v{version:apiVersion}/profile")]
 public sealed class ProfileController(
-    UserManager<AppUser> userManager) : ControllerBase {
+    UserManager<AppUser> userManager) : InternalController {
 
     [HttpPost("change-password")]
     public async Task<ActionResult<ApiResponse<object>>> ChangePassword(

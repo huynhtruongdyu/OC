@@ -10,12 +10,9 @@ using OC.Bootstrapper.Domain.Identities;
 
 namespace OC.Bootstrapper.API.Controllers;
 
-[ApiController]
-[ApiVersion("1.0")]
-[Route("api/v{version:apiVersion}/admin")]
 public sealed class AdminController(
     UserManager<AppUser> userManager,
-    RoleManager<AppRole> roleManager) : ControllerBase {
+    RoleManager<AppRole> roleManager) : InternalController {
 
     private async Task<IReadOnlyList<string>> GetUserPermissionsAsync(AppUser user) {
         var claims = await userManager.GetClaimsAsync(user);

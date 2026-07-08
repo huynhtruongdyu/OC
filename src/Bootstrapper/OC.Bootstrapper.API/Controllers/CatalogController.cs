@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
+using OC.Bootstrapper.API.Controllers.Base;
 using OC.Bootstrapper.Application.Abstractions.Authorization;
 using OC.Bootstrapper.Application.Abstractions.Services;
 using OC.Bootstrapper.Application.DTOs.Catalog;
@@ -7,12 +8,9 @@ using OC.Bootstrapper.Domain.Authorization;
 
 namespace OC.Bootstrapper.API.Controllers;
 
-[ApiController]
-[ApiVersion("1.0")]
-[Route("api/v{version:apiVersion}/catalog")]
 public sealed class CatalogController(
     IProductService productService,
-    ICategoryService categoryService) : ControllerBase {
+    ICategoryService categoryService) : InternalController {
 
     [HttpGet("products")]
     [HasPermission(AppPermissions.ProductsView)]
