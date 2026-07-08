@@ -159,10 +159,10 @@ const UserListPage = () => {
         key: 'actions',
         render: (_, record) => (
           <div className="flex gap-2">
-            <ProtectedButton size="small" permission="users.edit" onClick={() => openEdit(record)}>
+            <ProtectedButton size="small" permission="users.update" onClick={() => openEdit(record)}>
               Edit
             </ProtectedButton>
-            <ProtectedButton size="small" permission="users.changePassword" onClick={() => openChangePassword(record)}>
+            <ProtectedButton size="small" permission="users.update" onClick={() => openChangePassword(record)}>
               Change Password
             </ProtectedButton>
             <Popconfirm
@@ -238,7 +238,7 @@ const UserListPage = () => {
             />
           </Form.Item>
           <Form.Item label="Direct Permissions">
-            <ProtectedButton onClick={() => setPermModalOpen(true)} permission="users.managePermissions">
+            <ProtectedButton onClick={() => setPermModalOpen(true)} permission="users.update">
               {selectedPerms.length > 0
                 ? `Permissions (${selectedPerms.length} selected)`
                 : 'Select permissions'}

@@ -105,10 +105,10 @@ const RoleListPage = () => {
         key: 'actions',
         render: (_, record) => (
           <div className="flex gap-2">
-            <ProtectedButton size="small" onClick={() => openPermModal(record)} permission="roles.managePermissions">
+            <ProtectedButton size="small" onClick={() => openPermModal(record)} permission="roles.update">
               Permissions
             </ProtectedButton>
-            <ProtectedButton size="small" onClick={() => openEdit(record)} permission="roles.edit">
+            <ProtectedButton size="small" onClick={() => openEdit(record)} permission="roles.update">
               Edit
             </ProtectedButton>
             <Popconfirm
