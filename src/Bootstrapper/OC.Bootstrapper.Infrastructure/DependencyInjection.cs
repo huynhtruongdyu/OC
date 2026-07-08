@@ -31,11 +31,12 @@ public static class InfrastructureRegistration {
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
 
         services.AddScoped<IPermissionService, PermissionService>();
-        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-        services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
         services.AddIdentity<AppUser, AppRole>()
             .AddEntityFrameworkStores<AppIdentityDbContext>();
+
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
         services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
 

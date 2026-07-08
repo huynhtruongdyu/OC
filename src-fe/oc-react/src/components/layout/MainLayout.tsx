@@ -11,10 +11,9 @@ import {
   LogoutOutlined,
   ShoppingOutlined,
   SafetyCertificateOutlined,
-  KeyOutlined,
+  IdcardOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@/hooks/useAuth';
-import ChangePasswordModal from '@/components/ui/ChangePasswordModal';
 
 const { Header, Sider, Content } = Layout;
 
@@ -35,7 +34,6 @@ const LoadingBar = () => {
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [changePwOpen, setChangePwOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, can } = useAuth();
@@ -89,10 +87,10 @@ const MainLayout = () => {
     { key: 'info', label: user?.displayName, disabled: true },
     { type: 'divider' },
     {
-      key: 'change-password',
-      icon: <KeyOutlined />,
-      label: 'Change Password',
-      onClick: () => setChangePwOpen(true),
+      key: 'profile',
+      icon: <IdcardOutlined />,
+      label: 'Profile',
+      onClick: () => navigate('/profile'),
     },
     { type: 'divider' },
     {
@@ -168,10 +166,6 @@ const MainLayout = () => {
           </div>
         </Content>
       </Layout>
-      <ChangePasswordModal
-        open={changePwOpen}
-        onClose={() => setChangePwOpen(false)}
-      />
     </Layout>
   );
 };

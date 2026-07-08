@@ -1,8 +1,16 @@
-import { useCallback, useMemo } from 'react';
-import { Checkbox, Modal, Table, Tooltip, Typography } from 'antd';
+import { useCallback, useMemo, useState } from 'react';
+import { Checkbox, Modal, Spin, Table, Typography } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import type { ColumnsType } from 'antd/es/table';
 import { usePermissionGroups } from '@/features';
 import type { PermissionGroup } from '@/features';
+
+const ACTION_ORDER = ['view', 'create', 'update', 'delete', 'import', 'export'];
+
+type TableRow = {
+  key: string;
+  resource: string;
+};
 
 const PermissionModal = ({
   open,
@@ -15,55 +23,82 @@ const PermissionModal = ({
   onSave: (permissions: string[]) => void;
   onClose: () => void;
 }) => {
-  const { data: permGroups } = usePermissionGroups();
-  const selectedSet = useMemo(() => new Set(value), [value]);
+  const { data: permGroups, isLoading } = usePermissionGroups();
+  const [draft, setDraft] = useState<Set<string>>(() => new Set(value));
 
   const allPermissions = useMemo(
     () => permGroups?.flatMap((g) => g.permissions) ?? [],
     [permGroups],
   );
 
+  const permMap = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const g of permGroups ?? []) {
+      for (const p of g.permissions) {
+        const action = p.split('.').pop();
+        if (action) map.set(`${g.group}.${action}`, p);
+      }
+    }
+    return map;
+  }, [permGroups]);
+
+  const allActions = useMemo(() => {
+    const set = new Set<string>();
+    for (const g of permGroups ?? []) {
+      for (const p of g.permissions) {
+        const action = p.split('.').pop();
+        if (action) set.add(action);
+      }
+    }
+    return ACTION_ORDER.filter((a) => set.has(a));
+  }, [permGroups]);
+
   const allChecked = useMemo(
-    () => allPermissions.length > 0 && allPermissions.every((p) => selectedSet.has(p)),
-    [allPermissions, selectedSet],
+    () => allPermissions.length > 0 && allPermissions.every((p) => draft.has(p)),
+    [allPermissions, draft],
   );
 
   const someChecked = useMemo(
-    () => allPermissions.some((p) => selectedSet.has(p)),
-    [allPermissions, selectedSet],
+    () => allPermissions.some((p) => draft.has(p)),
+    [allPermissions, draft],
   );
 
-  const toggle = useCallback(
-    (perm: string, checked: boolean) => {
-      const next = new Set(selectedSet);
+  const toggle = useCallback((perm: string, checked: boolean) => {
+    setDraft((prev) => {
+      const next = new Set(prev);
       if (checked) next.add(perm);
       else next.delete(perm);
-      onSave([...next]);
-    },
-    [selectedSet, onSave],
-  );
+      return next;
+    });
+  }, []);
 
-  const toggleGroup = useCallback(
-    (group: PermissionGroup, checked: boolean) => {
-      const next = new Set(selectedSet);
+  const toggleResource = useCallback((group: PermissionGroup, checked: boolean) => {
+    setDraft((prev) => {
+      const next = new Set(prev);
       for (const perm of group.permissions) {
         if (checked) next.add(perm);
         else next.delete(perm);
       }
-      onSave([...next]);
-    },
-    [selectedSet, onSave],
-  );
+      return next;
+    });
+  }, []);
 
-  const toggleAll = useCallback(
-    (checked: boolean) => {
-      onSave(checked ? [...allPermissions] : []);
-    },
-    [allPermissions, onSave],
-  );
+  const toggleAll = useCallback((checked: boolean) => {
+    setDraft(new Set(checked ? allPermissions : []));
+  }, [allPermissions]);
 
-  const columns = [
-    {
+  const handleOk = () => {
+    onSave([...draft]);
+    onClose();
+  };
+
+  const dataSource = useMemo(() => {
+    if (!permGroups) return [];
+    return permGroups.map((g) => ({ key: g.group, resource: g.group }));
+  }, [permGroups]);
+
+  const columns: ColumnsType<TableRow> = useMemo(() => {
+    const resourceCol: ColumnsType<TableRow>[number] = {
       title: (
         <div className="flex items-center gap-2 whitespace-nowrap">
           <Checkbox
@@ -71,71 +106,63 @@ const PermissionModal = ({
             indeterminate={!allChecked && someChecked}
             onChange={(e: CheckboxChangeEvent) => toggleAll(e.target.checked)}
           />
-          <Typography.Text strong>Permission</Typography.Text>
+          <Typography.Text strong>Resource</Typography.Text>
         </div>
       ),
-      dataIndex: 'perm',
-      key: 'perm',
-      width: 160,
-      render: (name: string) => <span className="text-xs">{name}</span>,
-    },
-    ...(permGroups ?? []).flatMap((group) => {
-      const groupChecked = group.permissions.every((p) => selectedSet.has(p));
-      const groupIndeterminate =
-        !groupChecked && group.permissions.some((p) => selectedSet.has(p));
-      return {
-        title: (
+      dataIndex: 'resource',
+      key: 'resource',
+      width: 140,
+      render: (name: string, record: TableRow) => {
+        const group = permGroups?.find((g) => g.group === record.resource);
+        if (!group) return <span>{name}</span>;
+        const groupChecked = group.permissions.every((p) => draft.has(p));
+        const groupIndeterminate = !groupChecked && group.permissions.some((p) => draft.has(p));
+        return (
           <Checkbox
             checked={groupChecked}
             indeterminate={groupIndeterminate}
-            onChange={(e: CheckboxChangeEvent) => toggleGroup(group, e.target.checked)}
+            onChange={(e: CheckboxChangeEvent) => toggleResource(group, e.target.checked)}
           >
-            <Typography.Text strong>{group.group}</Typography.Text>
+            <Typography.Text strong>{name}</Typography.Text>
           </Checkbox>
-        ),
-        children: group.permissions.map((perm) => ({
-          title: <Tooltip title={perm} key={perm}><span className="text-xs">{perm.split('.').pop()}</span></Tooltip>,
-          dataIndex: perm,
-          key: perm,
-          width: 68,
-          render: () => (
-            <div className="flex justify-center">
-              <Checkbox
-                checked={selectedSet.has(perm)}
-                onChange={(e: CheckboxChangeEvent) => toggle(perm, e.target.checked)}
-              />
-            </div>
-          ),
-        })),
-      };
-    }),
-  ];
+        );
+      },
+    };
 
-  const dataSource = useMemo(
-    () => [{ key: 'value', perm: 'Value' }],
-    [],
-  );
+    const actionCols = allActions.map((action) => ({
+      title: <span className="text-xs capitalize">{action}</span>,
+      key: `action_${action}`,
+      width: 72,
+      render: (_: unknown, record: TableRow) => {
+        const perm = permMap.get(`${record.resource}.${action}`);
+        if (!perm) return null;
+        return (
+          <div className="flex justify-center">
+            <Checkbox
+              checked={draft.has(perm)}
+              onChange={(e: CheckboxChangeEvent) => toggle(perm, e.target.checked)}
+            />
+          </div>
+        );
+      },
+    }));
+
+    return [resourceCol, ...actionCols];
+  }, [allChecked, someChecked, toggleAll, allActions, permGroups, draft, toggleResource, toggle, permMap]);
 
   return (
     <Modal
       title="Select Permissions"
       open={open}
-      onOk={() => onClose()}
+      onOk={handleOk}
       onCancel={onClose}
-      width={800}
+      width={700}
       destroyOnClose
     >
-      <div className="flex justify-end mb-2">
-        <Checkbox
-          checked={allChecked}
-          indeterminate={!allChecked && someChecked}
-          onChange={(e: CheckboxChangeEvent) => toggleAll(e.target.checked)}
-        >
-          Select All
-        </Checkbox>
-      </div>
-      <div className="overflow-auto">
-        <Table
+      {isLoading || !permGroups ? (
+        <div className="flex justify-center items-center h-32"><Spin /></div>
+      ) : (
+        <Table<TableRow>
           dataSource={dataSource}
           columns={columns}
           pagination={false}
@@ -143,7 +170,7 @@ const PermissionModal = ({
           size="small"
           scroll={{ x: 'max-content' }}
         />
-      </div>
+      )}
     </Modal>
   );
 };

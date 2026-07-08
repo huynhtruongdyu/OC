@@ -3,6 +3,7 @@ import {
   getRoles, getRole, createRole, updateRole, deleteRole,
   getRolePermissions, updateRolePermissions, getPermissionGroups,
   getUserRoles, updateUserRoles, getUserPermissions, updateUserPermissions,
+  updateUserPassword,
 } from './api';
 import type { CreateUserRequest, UpdateUserRequest, CreateRoleRequest, UpdateRoleRequest, UpdateRolePermissionsRequest } from './types';
 
@@ -16,6 +17,7 @@ export const userService = {
   updateRoles: (id: string, roles: string[]) => updateUserRoles(id, roles),
   getPermissions: (id: string) => getUserPermissions(id),
   updatePermissions: (id: string, data: UpdateRolePermissionsRequest) => updateUserPermissions(id, data),
+  updatePassword: (id: string, newPassword: string) => updateUserPassword(id, newPassword),
 };
 
 export const roleService = {

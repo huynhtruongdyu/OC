@@ -65,7 +65,8 @@ const UserListPage = () => {
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       if (editingUser) {
-        const { password: _, ...rest } = values;
+        const rest = { ...values };
+        delete rest.password;
         await updateUser({ id: editingUser.id, data: { ...rest, permissions: selectedPerms } as UpdateUserRequest });
       } else {
         await createUser({ ...values, permissions: selectedPerms } as CreateUserRequest);

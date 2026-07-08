@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Input, Modal, Popconfirm, Typography } from 'antd';
 import { DataTable, PermissionModal } from '@/components/ui';
 import type { DataTableColumn } from '@/components/ui';
-import { useRoles, useCreateRole, useUpdateRole, useDeleteRole, useUpdateRolePermissions } from '@/features';
+import { roleService, useRoles, useCreateRole, useUpdateRole, useDeleteRole, useUpdateRolePermissions } from '@/features';
 import type { AdminRole, CreateRoleRequest, UpdateRoleRequest } from '@/features';
 
 type FormValues = { name: string };
@@ -42,19 +42,13 @@ const RoleListPage = () => {
   }, [form]);
 
   const openPermModal = useCallback(async (role: AdminRole) => {
-    setPermModalRole(role);
-    setPermModalPerms([]);
     try {
-      const raw = localStorage.getItem('oc_auth');
-      if (!raw) return;
-      const { token } = JSON.parse(raw);
-      const res = await fetch(`/api/v1/admin/roles/${role.id}/permissions`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const json = await res.json();
-      setPermModalPerms(json.data ?? []);
+      const perms = await roleService.getPermissions(role.id);
+      setPermModalPerms(perms ?? []);
     } catch {
       setPermModalPerms([]);
+    } finally {
+      setPermModalRole(role);
     }
   }, []);
 

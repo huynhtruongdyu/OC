@@ -52,6 +52,14 @@ export const useUpdateUserPermissions = () => {
   });
 };
 
+export const useUpdateUserPassword = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, newPassword }: { id: string; newPassword: string }) => userService.updatePassword(id, newPassword),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: adminKeys.users() }); showToast.success('Password updated'); },
+  });
+};
+
 export const useRoles = () =>
   useQuery({ queryKey: adminKeys.roles(), queryFn: roleService.getAll });
 

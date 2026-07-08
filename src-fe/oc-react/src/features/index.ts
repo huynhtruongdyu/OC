@@ -60,6 +60,7 @@ export {
   useUpdateRolePermissions,
   usePermissionGroups,
   adminKeys,
+  roleService,
 } from './admin';
 export type {
   AdminUser,

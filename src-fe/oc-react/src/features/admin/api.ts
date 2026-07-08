@@ -39,6 +39,9 @@ export const getUserPermissions = (id: string) =>
 export const updateUserPermissions = (id: string, data: UpdateRolePermissionsRequest) =>
   api.put(`/api/v1/admin/users/${id}/permissions`, data);
 
+export const updateUserPassword = (id: string, newPassword: string) =>
+  api.put(`/api/v1/admin/users/${id}/password`, { newPassword });
+
 export const getRoles = () =>
   api.get<ApiResponse<AdminRole[]>>('/api/v1/admin/roles').then((r) => r.data.data!);
 

@@ -10,6 +10,7 @@ using OC.Bootstrapper.Domain.Identities;
 
 namespace OC.Bootstrapper.API.Controllers;
 
+[Route("api/v{version:apiVersion}/admin")]
 public sealed class AdminController(
     UserManager<AppUser> userManager,
     RoleManager<AppRole> roleManager) : InternalController {
@@ -123,6 +124,35 @@ public sealed class AdminController(
 
         if (request.Permissions is not null) {
             await SyncUserPermissionsAsync(appUser, request.Permissions);
+        }
+
+        return NoContent();
+    }
+
+    [HttpPut("users/{id:guid}/password")]
+    [HasPermission(AppPermissions.UsersUpdate)]
+    public async Task<ActionResult<ApiResponse<object>>> UpdateUserPassword(Guid id, [FromBody] UpdateUserPasswordRequest request, CancellationToken ct) {
+        var appUser = await userManager.FindByIdAsync(id.ToString());
+        if (appUser is null)
+            return NotFound(ApiResponse.Fail<object>("User not found."));
+
+        if (appUser.UserName == "root")
+            return BadRequest(ApiResponse.Fail<object>("Cannot modify the root user."));
+
+        var removeResult = await userManager.RemovePasswordAsync(appUser);
+        if (!removeResult.Succeeded) {
+            var errors = removeResult.Errors
+                .GroupBy(e => e.Code)
+                .ToDictionary(g => g.Key, g => g.Select(e => e.Description).ToArray());
+            return BadRequest(ApiResponse.Fail<object>("Failed to remove current password.", errors));
+        }
+
+        var addResult = await userManager.AddPasswordAsync(appUser, request.NewPassword);
+        if (!addResult.Succeeded) {
+            var errors = addResult.Errors
+                .GroupBy(e => e.Code)
+                .ToDictionary(g => g.Key, g => g.Select(e => e.Description).ToArray());
+            return BadRequest(ApiResponse.Fail<object>("Failed to set new password.", errors));
         }
 
         return NoContent();

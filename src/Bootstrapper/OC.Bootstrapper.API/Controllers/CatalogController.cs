@@ -8,6 +8,7 @@ using OC.Bootstrapper.Domain.Authorization;
 
 namespace OC.Bootstrapper.API.Controllers;
 
+[Route("api/v{version:apiVersion}/catalog")]
 public sealed class CatalogController(
     IProductService productService,
     ICategoryService categoryService) : InternalController {
