@@ -8,6 +8,7 @@ import {
   useUpdateUser,
   useDeleteUser,
   useRoles,
+  useUpdateUserPassword,
 } from '@/features';
 import type { AdminUser, CreateUserRequest, UpdateUserRequest } from '@/features';
 
@@ -30,6 +31,10 @@ const UserListPage = () => {
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
   const [selectedPerms, setSelectedPerms] = useState<string[]>([]);
   const [permModalOpen, setPermModalOpen] = useState(false);
+  const [passwordModalUser, setPasswordModalUser] = useState<AdminUser | null>(null);
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const { mutateAsync: updateUserPassword, isPending: isUpdatingPassword } = useUpdateUserPassword();
   const [form] = Form.useForm<FormValues>();
 
   const openCreate = useCallback(() => {
@@ -83,6 +88,21 @@ const UserListPage = () => {
     [deleteUser],
   );
 
+  const openChangePassword = useCallback((user: AdminUser) => {
+    setPasswordModalUser(user);
+    setNewPassword('');
+    setPasswordModalOpen(true);
+  }, []);
+
+  const handleChangePassword = useCallback(async () => {
+    if (passwordModalUser && newPassword.length >= 6) {
+      await updateUserPassword({ id: passwordModalUser.id, newPassword });
+      setPasswordModalOpen(false);
+      setPasswordModalUser(null);
+      setNewPassword('');
+    }
+  }, [passwordModalUser, newPassword, updateUserPassword]);
+
   const roleOptions = useMemo(
     () => allRoles?.map((r) => ({ label: r.name, value: r.name })) ?? [],
     [allRoles],
@@ -113,6 +133,9 @@ const UserListPage = () => {
             <Button size="small" onClick={() => openEdit(record)}>
               Edit
             </Button>
+            <Button size="small" onClick={() => openChangePassword(record)}>
+              Change Password
+            </Button>
             <Popconfirm
               title="Delete this user?"
               onConfirm={() => handleDelete(record.id)}
@@ -125,7 +148,7 @@ const UserListPage = () => {
         ),
       },
     ],
-    [openEdit, handleDelete],
+    [openEdit, handleDelete, openChangePassword],
   );
 
   return (
@@ -201,6 +224,22 @@ const UserListPage = () => {
         onSave={(perms) => setSelectedPerms(perms)}
         onClose={() => setPermModalOpen(false)}
       />
+
+      <Modal
+        title={`Change Password - ${passwordModalUser?.userName ?? ''}`}
+        open={passwordModalOpen}
+        onOk={handleChangePassword}
+        onCancel={() => { setPasswordModalOpen(false); setPasswordModalUser(null); setNewPassword(''); }}
+        confirmLoading={isUpdatingPassword}
+        okButtonProps={{ disabled: newPassword.length < 6 }}
+        destroyOnClose
+      >
+        <Input.Password
+          placeholder="New password (min 6 characters)"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+      </Modal>
     </div>
   );
 };

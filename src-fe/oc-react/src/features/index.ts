@@ -51,6 +51,7 @@ export {
   useDeleteUser,
   useUserPermissions,
   useUpdateUserPermissions,
+  useUpdateUserPassword,
   useRoles,
   useRole,
   useCreateRole,

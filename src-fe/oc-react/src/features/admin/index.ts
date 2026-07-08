@@ -7,7 +7,7 @@ export {
 export { userService, roleService, permissionService } from './services';
 export {
   useUsers, useUser, useCreateUser, useUpdateUser, useDeleteUser,
-  useUserPermissions, useUpdateUserPermissions,
+  useUserPermissions, useUpdateUserPermissions, useUpdateUserPassword,
   useRoles, useRole, useCreateRole, useUpdateRole, useDeleteRole,
   useRolePermissions, useUpdateRolePermissions, usePermissionGroups,
   adminKeys,

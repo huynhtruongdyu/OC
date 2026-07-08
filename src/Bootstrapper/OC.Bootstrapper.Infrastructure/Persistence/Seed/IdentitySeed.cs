@@ -44,7 +44,7 @@ public static class IdentitySeed {
             var adminPerms = new HashSet<string> {
                 AppPermissions.ProductsView, AppPermissions.ProductsCreate, AppPermissions.ProductsUpdate, AppPermissions.ProductsDelete,
                 AppPermissions.CategoriesView, AppPermissions.CategoriesCreate, AppPermissions.CategoriesUpdate, AppPermissions.CategoriesDelete,
-                AppPermissions.UsersView,
+                AppPermissions.UsersView, AppPermissions.UsersUpdate,
                 AppPermissions.RolesView,
             };
             var existingClaims = await roleManager.GetClaimsAsync(admin);
