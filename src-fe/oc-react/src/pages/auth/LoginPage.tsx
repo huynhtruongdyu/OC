@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { showToast } from '@/lib';
 import { useLogin } from '@/features/auth';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -15,7 +16,9 @@ const LoginPage = () => {
         setSession(data);
         navigate('/');
       },
-      onError: () => {},
+      onError: (error) => {
+        showToast.error('Login failed: Invalid username or password');
+      },
     });
   };
 

@@ -9,7 +9,10 @@ export const weatherKeys = {
 };
 
 export const useWeatherForecast = () =>
-  useQuery({ queryKey: weatherKeys.forecast(), queryFn: weatherService.getForecast });
+  useQuery({
+    queryKey: weatherKeys.forecast(),
+    queryFn: weatherService.getForecast,
+  });
 
 export const useMockWeatherForecast = () =>
   useQuery({ queryKey: weatherKeys.mock(), queryFn: weatherService.getMock });
@@ -21,4 +24,8 @@ export const useSlowWeatherForecast = (delayMs = 5000) =>
   });
 
 export const useFailedWeatherForecast = () =>
-  useQuery({ queryKey: weatherKeys.failed(), queryFn: weatherService.getFailed, retry: false });
+  useQuery({
+    queryKey: weatherKeys.failed(),
+    queryFn: weatherService.getFailed,
+    retry: false,
+  });

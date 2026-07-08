@@ -51,7 +51,9 @@ export const DataTable = <T extends object>({
 }: DataTableProps<T>) => {
   const isServerSide = !!onSearchChange;
   const [searchText, setSearchText] = useState('');
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
 
   const filteredData = useMemo(
     () =>

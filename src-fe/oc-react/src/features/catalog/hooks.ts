@@ -13,10 +13,17 @@ export const catalogKeys = {
 /* ───── Products ───── */
 
 export const useProducts = () =>
-  useQuery({ queryKey: catalogKeys.products(), queryFn: productService.getAll });
+  useQuery({
+    queryKey: catalogKeys.products(),
+    queryFn: productService.getAll,
+  });
 
 export const useProduct = (id: string) =>
-  useQuery({ queryKey: catalogKeys.product(id), queryFn: () => productService.getById(id), enabled: !!id });
+  useQuery({
+    queryKey: catalogKeys.product(id),
+    queryFn: () => productService.getById(id),
+    enabled: !!id,
+  });
 
 export const useCreateProduct = () => {
   const qc = useQueryClient();
@@ -32,8 +39,13 @@ export const useCreateProduct = () => {
 export const useUpdateProduct = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Parameters<typeof productService.update>[1] }) =>
-      productService.update(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Parameters<typeof productService.update>[1];
+    }) => productService.update(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: catalogKeys.products() });
       showToast.success('Product updated');
@@ -55,10 +67,17 @@ export const useDeleteProduct = () => {
 /* ───── Categories ───── */
 
 export const useCategories = () =>
-  useQuery({ queryKey: catalogKeys.categories(), queryFn: categoryService.getAll });
+  useQuery({
+    queryKey: catalogKeys.categories(),
+    queryFn: categoryService.getAll,
+  });
 
 export const useCategory = (id: string) =>
-  useQuery({ queryKey: catalogKeys.category(id), queryFn: () => categoryService.getById(id), enabled: !!id });
+  useQuery({
+    queryKey: catalogKeys.category(id),
+    queryFn: () => categoryService.getById(id),
+    enabled: !!id,
+  });
 
 export const useCreateCategory = () => {
   const qc = useQueryClient();
@@ -74,8 +93,13 @@ export const useCreateCategory = () => {
 export const useUpdateCategory = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Parameters<typeof categoryService.update>[1] }) =>
-      categoryService.update(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Parameters<typeof categoryService.update>[1];
+    }) => categoryService.update(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: catalogKeys.categories() });
       showToast.success('Category updated');

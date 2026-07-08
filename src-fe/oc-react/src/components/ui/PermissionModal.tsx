@@ -54,7 +54,8 @@ const PermissionModal = ({
   }, [permGroups]);
 
   const allChecked = useMemo(
-    () => allPermissions.length > 0 && allPermissions.every((p) => draft.has(p)),
+    () =>
+      allPermissions.length > 0 && allPermissions.every((p) => draft.has(p)),
     [allPermissions, draft],
   );
 
@@ -72,20 +73,26 @@ const PermissionModal = ({
     });
   }, []);
 
-  const toggleResource = useCallback((group: PermissionGroup, checked: boolean) => {
-    setDraft((prev) => {
-      const next = new Set(prev);
-      for (const perm of group.permissions) {
-        if (checked) next.add(perm);
-        else next.delete(perm);
-      }
-      return next;
-    });
-  }, []);
+  const toggleResource = useCallback(
+    (group: PermissionGroup, checked: boolean) => {
+      setDraft((prev) => {
+        const next = new Set(prev);
+        for (const perm of group.permissions) {
+          if (checked) next.add(perm);
+          else next.delete(perm);
+        }
+        return next;
+      });
+    },
+    [],
+  );
 
-  const toggleAll = useCallback((checked: boolean) => {
-    setDraft(new Set(checked ? allPermissions : []));
-  }, [allPermissions]);
+  const toggleAll = useCallback(
+    (checked: boolean) => {
+      setDraft(new Set(checked ? allPermissions : []));
+    },
+    [allPermissions],
+  );
 
   const handleOk = () => {
     onSave([...draft]);
@@ -116,12 +123,15 @@ const PermissionModal = ({
         const group = permGroups?.find((g) => g.group === record.resource);
         if (!group) return <span>{name}</span>;
         const groupChecked = group.permissions.every((p) => draft.has(p));
-        const groupIndeterminate = !groupChecked && group.permissions.some((p) => draft.has(p));
+        const groupIndeterminate =
+          !groupChecked && group.permissions.some((p) => draft.has(p));
         return (
           <Checkbox
             checked={groupChecked}
             indeterminate={groupIndeterminate}
-            onChange={(e: CheckboxChangeEvent) => toggleResource(group, e.target.checked)}
+            onChange={(e: CheckboxChangeEvent) =>
+              toggleResource(group, e.target.checked)
+            }
           >
             <Typography.Text strong>{name}</Typography.Text>
           </Checkbox>
@@ -140,7 +150,9 @@ const PermissionModal = ({
           <div className="flex justify-center">
             <Checkbox
               checked={draft.has(perm)}
-              onChange={(e: CheckboxChangeEvent) => toggle(perm, e.target.checked)}
+              onChange={(e: CheckboxChangeEvent) =>
+                toggle(perm, e.target.checked)
+              }
             />
           </div>
         );
@@ -148,7 +160,17 @@ const PermissionModal = ({
     }));
 
     return [resourceCol, ...actionCols];
-  }, [allChecked, someChecked, toggleAll, allActions, permGroups, draft, toggleResource, toggle, permMap]);
+  }, [
+    allChecked,
+    someChecked,
+    toggleAll,
+    allActions,
+    permGroups,
+    draft,
+    toggleResource,
+    toggle,
+    permMap,
+  ]);
 
   return (
     <Modal
@@ -160,7 +182,9 @@ const PermissionModal = ({
       destroyOnClose
     >
       {isLoading || !permGroups ? (
-        <div className="flex justify-center items-center h-32"><Spin /></div>
+        <div className="flex justify-center items-center h-32">
+          <Spin />
+        </div>
       ) : (
         <Table<TableRow>
           dataSource={dataSource}

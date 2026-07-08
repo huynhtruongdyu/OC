@@ -1,11 +1,30 @@
 import {
-  getUsers, getUser, createUser, updateUser, deleteUser,
-  getRoles, getRole, createRole, updateRole, deleteRole,
-  getRolePermissions, updateRolePermissions, getPermissionGroups,
-  getUserRoles, updateUserRoles, getUserPermissions, updateUserPermissions,
+  getUsers,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser,
+  getRoles,
+  getRole,
+  createRole,
+  updateRole,
+  deleteRole,
+  getRolePermissions,
+  updateRolePermissions,
+  getPermissionGroups,
+  getUserRoles,
+  updateUserRoles,
+  getUserPermissions,
+  updateUserPermissions,
   updateUserPassword,
 } from './api';
-import type { CreateUserRequest, UpdateUserRequest, CreateRoleRequest, UpdateRoleRequest, UpdateRolePermissionsRequest } from './types';
+import type {
+  CreateUserRequest,
+  UpdateUserRequest,
+  CreateRoleRequest,
+  UpdateRoleRequest,
+  UpdateRolePermissionsRequest,
+} from './types';
 
 export const userService = {
   getAll: () => getUsers(),
@@ -16,8 +35,10 @@ export const userService = {
   getRoles: (id: string) => getUserRoles(id),
   updateRoles: (id: string, roles: string[]) => updateUserRoles(id, roles),
   getPermissions: (id: string) => getUserPermissions(id),
-  updatePermissions: (id: string, data: UpdateRolePermissionsRequest) => updateUserPermissions(id, data),
-  updatePassword: (id: string, newPassword: string) => updateUserPassword(id, newPassword),
+  updatePermissions: (id: string, data: UpdateRolePermissionsRequest) =>
+    updateUserPermissions(id, data),
+  updatePassword: (id: string, newPassword: string) =>
+    updateUserPassword(id, newPassword),
 };
 
 export const roleService = {
@@ -27,7 +48,8 @@ export const roleService = {
   update: (id: string, data: UpdateRoleRequest) => updateRole(id, data),
   remove: (id: string) => deleteRole(id),
   getPermissions: (id: string) => getRolePermissions(id),
-  updatePermissions: (id: string, data: UpdateRolePermissionsRequest) => updateRolePermissions(id, data),
+  updatePermissions: (id: string, data: UpdateRolePermissionsRequest) =>
+    updateRolePermissions(id, data),
 };
 
 export const permissionService = {

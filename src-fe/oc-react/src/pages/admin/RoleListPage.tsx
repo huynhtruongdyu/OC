@@ -2,8 +2,19 @@ import { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Input, Modal, Popconfirm, Typography } from 'antd';
 import { DataTable, PermissionModal } from '@/components/ui';
 import type { DataTableColumn } from '@/components/ui';
-import { roleService, useRoles, useCreateRole, useUpdateRole, useDeleteRole, useUpdateRolePermissions } from '@/features';
-import type { AdminRole, CreateRoleRequest, UpdateRoleRequest } from '@/features';
+import {
+  roleService,
+  useRoles,
+  useCreateRole,
+  useUpdateRole,
+  useDeleteRole,
+  useUpdateRolePermissions,
+} from '@/features';
+import type {
+  AdminRole,
+  CreateRoleRequest,
+  UpdateRoleRequest,
+} from '@/features';
 
 type FormValues = { name: string };
 
@@ -55,7 +66,10 @@ const RoleListPage = () => {
   const handlePermSave = useCallback(
     async (perms: string[]) => {
       if (!permModalRole) return;
-      await updateRolePerms({ id: permModalRole.id, data: { permissions: perms } });
+      await updateRolePerms({
+        id: permModalRole.id,
+        data: { permissions: perms },
+      });
       setPermModalRole(null);
     },
     [permModalRole, updateRolePerms],
@@ -64,7 +78,10 @@ const RoleListPage = () => {
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       if (editingRole) {
-        await updateRole({ id: editingRole.id, data: values as UpdateRoleRequest });
+        await updateRole({
+          id: editingRole.id,
+          data: values as UpdateRoleRequest,
+        });
       } else {
         await createRole(values as CreateRoleRequest);
       }
@@ -130,7 +147,12 @@ const RoleListPage = () => {
         onCancel={closeModal}
         destroyOnClose
       >
-        <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off">
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          autoComplete="off"
+        >
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>

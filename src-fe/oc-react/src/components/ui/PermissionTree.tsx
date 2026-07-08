@@ -59,20 +59,27 @@ const PermissionTree = ({
       </Checkbox>
       <Divider className="my-2" />
       {groups.map((group) => {
-        const groupSelected = group.permissions.every((p) => selectedSet.has(p));
+        const groupSelected = group.permissions.every((p) =>
+          selectedSet.has(p),
+        );
         const groupIndeterminate =
           !groupSelected && group.permissions.some((p) => selectedSet.has(p));
 
         return (
-          <Card key={group.group} size="small" className="mb-2" title={
-            <Checkbox
-              checked={groupSelected}
-              indeterminate={groupIndeterminate}
-              onChange={(e) => toggleGroup(group, e.target.checked)}
-            >
-              <Typography.Text strong>{group.group}</Typography.Text>
-            </Checkbox>
-          }>
+          <Card
+            key={group.group}
+            size="small"
+            className="mb-2"
+            title={
+              <Checkbox
+                checked={groupSelected}
+                indeterminate={groupIndeterminate}
+                onChange={(e) => toggleGroup(group, e.target.checked)}
+              >
+                <Typography.Text strong>{group.group}</Typography.Text>
+              </Checkbox>
+            }
+          >
             <div className="flex flex-col gap-1 pl-6">
               {group.permissions.map((perm) => (
                 <Checkbox

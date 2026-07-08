@@ -1,5 +1,14 @@
 import { useCallback, useState } from 'react';
-import { Button, Card, Descriptions, Form, Input, message, Tag, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  Descriptions,
+  Form,
+  Input,
+  message,
+  Tag,
+  Typography,
+} from 'antd';
 import { profileApi, useProfile } from '@/features/profile';
 
 const ProfilePage = () => {
@@ -30,7 +39,10 @@ const ProfilePage = () => {
     async (values: { currentPassword: string; newPassword: string }) => {
       setPwLoading(true);
       try {
-        await profileApi.changePassword(values.currentPassword, values.newPassword);
+        await profileApi.changePassword(
+          values.currentPassword,
+          values.newPassword,
+        );
         pwForm.resetFields();
         message.success('Password changed successfully');
       } catch {
@@ -49,7 +61,9 @@ const ProfilePage = () => {
       <Card title="Account Info" loading={isLoading}>
         {profile && (
           <Descriptions column={1} bordered size="small">
-            <Descriptions.Item label="Username">{profile.userName}</Descriptions.Item>
+            <Descriptions.Item label="Username">
+              {profile.userName}
+            </Descriptions.Item>
             <Descriptions.Item label="Email">{profile.email}</Descriptions.Item>
             <Descriptions.Item label="Display Name">
               {editing ? (
@@ -67,23 +81,49 @@ const ProfilePage = () => {
                     <Input />
                   </Form.Item>
                   <Form.Item className="mb-0">
-                    <Button type="primary" htmlType="submit" loading={profileLoading} size="small">Save</Button>
-                    <Button className="ml-2" size="small" onClick={() => setEditing(false)}>Cancel</Button>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      loading={profileLoading}
+                      size="small"
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      className="ml-2"
+                      size="small"
+                      onClick={() => setEditing(false)}
+                    >
+                      Cancel
+                    </Button>
                   </Form.Item>
                 </Form>
               ) : (
                 <span>
                   {profile.displayName}
-                  <Button type="link" size="small" className="ml-2" onClick={() => setEditing(true)}>Edit</Button>
+                  <Button
+                    type="link"
+                    size="small"
+                    className="ml-2"
+                    onClick={() => setEditing(true)}
+                  >
+                    Edit
+                  </Button>
                 </span>
               )}
             </Descriptions.Item>
             <Descriptions.Item label="Roles">
-              {profile.roles.map((r) => <Tag key={r}>{r}</Tag>)}
+              {profile.roles.map((r) => (
+                <Tag key={r}>{r}</Tag>
+              ))}
             </Descriptions.Item>
             <Descriptions.Item label="Permissions">
               <div className="flex gap-1 flex-wrap">
-                {profile.permissions.map((p) => <Tag key={p} color="blue">{p}</Tag>)}
+                {profile.permissions.map((p) => (
+                  <Tag key={p} color="blue">
+                    {p}
+                  </Tag>
+                ))}
               </div>
             </Descriptions.Item>
           </Descriptions>
@@ -101,7 +141,9 @@ const ProfilePage = () => {
           <Form.Item
             name="currentPassword"
             label="Current Password"
-            rules={[{ required: true, message: 'Please enter your current password' }]}
+            rules={[
+              { required: true, message: 'Please enter your current password' },
+            ]}
           >
             <Input.Password />
           </Form.Item>

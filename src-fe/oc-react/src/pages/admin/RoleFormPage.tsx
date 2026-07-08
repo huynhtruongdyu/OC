@@ -8,7 +8,8 @@ const RoleFormPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: role, isLoading: roleLoading } = useRole(id ?? '');
-  const { mutateAsync: updatePermissions, isPending } = useUpdateRolePermissions();
+  const { mutateAsync: updatePermissions, isPending } =
+    useUpdateRolePermissions();
 
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [permModalOpen, setPermModalOpen] = useState(false);
@@ -31,7 +32,11 @@ const RoleFormPage = () => {
   }, []);
 
   if (roleLoading) {
-    return <div className="flex justify-center items-center h-64"><Spin size="large" /></div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Spin size="large" />
+      </div>
+    );
   }
 
   if (!role) {

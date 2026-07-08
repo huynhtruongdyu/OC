@@ -6,11 +6,13 @@ export const onRejected = (
   },
 ) => {
   if (error.response) {
-    const message =
-      error.response.data?.title ??
-      error.response.data?.message ??
-      error.message;
-    if (error.response.status !== 401) {
+    if (error.response.status === 403) {
+      showToast.error('You do not have permission to perform this action');
+    } else if (error.response.status !== 401) {
+      const message =
+        error.response.data?.title ??
+        error.response.data?.message ??
+        error.message;
       showToast.error(message);
     }
   } else {

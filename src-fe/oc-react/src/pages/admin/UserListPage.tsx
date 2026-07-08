@@ -1,5 +1,14 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Button, Form, Input, Modal, Popconfirm, Select, Tag, Typography } from 'antd';
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Select,
+  Tag,
+  Typography,
+} from 'antd';
 import { DataTable, PermissionModal } from '@/components/ui';
 import type { DataTableColumn } from '@/components/ui';
 import {
@@ -10,7 +19,11 @@ import {
   useRoles,
   useUpdateUserPassword,
 } from '@/features';
-import type { AdminUser, CreateUserRequest, UpdateUserRequest } from '@/features';
+import type {
+  AdminUser,
+  CreateUserRequest,
+  UpdateUserRequest,
+} from '@/features';
 
 type FormValues = {
   userName: string;
@@ -31,10 +44,13 @@ const UserListPage = () => {
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
   const [selectedPerms, setSelectedPerms] = useState<string[]>([]);
   const [permModalOpen, setPermModalOpen] = useState(false);
-  const [passwordModalUser, setPasswordModalUser] = useState<AdminUser | null>(null);
+  const [passwordModalUser, setPasswordModalUser] = useState<AdminUser | null>(
+    null,
+  );
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [newPassword, setNewPassword] = useState('');
-  const { mutateAsync: updateUserPassword, isPending: isUpdatingPassword } = useUpdateUserPassword();
+  const { mutateAsync: updateUserPassword, isPending: isUpdatingPassword } =
+    useUpdateUserPassword();
   const [form] = Form.useForm<FormValues>();
 
   const openCreate = useCallback(() => {
@@ -72,9 +88,15 @@ const UserListPage = () => {
       if (editingUser) {
         const rest = { ...values };
         delete rest.password;
-        await updateUser({ id: editingUser.id, data: { ...rest, permissions: selectedPerms } as UpdateUserRequest });
+        await updateUser({
+          id: editingUser.id,
+          data: { ...rest, permissions: selectedPerms } as UpdateUserRequest,
+        });
       } else {
-        await createUser({ ...values, permissions: selectedPerms } as CreateUserRequest);
+        await createUser({
+          ...values,
+          permissions: selectedPerms,
+        } as CreateUserRequest);
       }
       closeModal();
     },
@@ -124,7 +146,11 @@ const UserListPage = () => {
           </div>
         ),
       },
-      { title: 'Locked', dataIndex: 'lockoutEnabled', render: (v: boolean) => v ? 'Yes' : 'No' },
+      {
+        title: 'Locked',
+        dataIndex: 'lockoutEnabled',
+        render: (v: boolean) => (v ? 'Yes' : 'No'),
+      },
       {
         title: 'Actions',
         key: 'actions',
@@ -180,7 +206,11 @@ const UserListPage = () => {
           onFinish={handleSubmit}
           autoComplete="off"
         >
-          <Form.Item name="userName" label="Username" rules={[{ required: true }]}>
+          <Form.Item
+            name="userName"
+            label="Username"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item
@@ -190,7 +220,11 @@ const UserListPage = () => {
           >
             <Input />
           </Form.Item>
-          <Form.Item name="displayName" label="Display Name" rules={[{ required: true }]}>
+          <Form.Item
+            name="displayName"
+            label="Display Name"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
           {!editingUser && (
@@ -206,7 +240,11 @@ const UserListPage = () => {
             </Form.Item>
           )}
           <Form.Item name="roles" label="Roles">
-            <Select mode="multiple" options={roleOptions} placeholder="Select roles" />
+            <Select
+              mode="multiple"
+              options={roleOptions}
+              placeholder="Select roles"
+            />
           </Form.Item>
           <Form.Item label="Direct Permissions">
             <Button onClick={() => setPermModalOpen(true)}>
@@ -229,7 +267,11 @@ const UserListPage = () => {
         title={`Change Password - ${passwordModalUser?.userName ?? ''}`}
         open={passwordModalOpen}
         onOk={handleChangePassword}
-        onCancel={() => { setPasswordModalOpen(false); setPasswordModalUser(null); setNewPassword(''); }}
+        onCancel={() => {
+          setPasswordModalOpen(false);
+          setPasswordModalUser(null);
+          setNewPassword('');
+        }}
         confirmLoading={isUpdatingPassword}
         okButtonProps={{ disabled: newPassword.length < 6 }}
         destroyOnClose

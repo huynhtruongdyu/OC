@@ -16,7 +16,10 @@ const ChangePasswordModal = ({
     async (values: { currentPassword: string; newPassword: string }) => {
       setLoading(true);
       try {
-        const res = await changePassword(values.currentPassword, values.newPassword);
+        const res = await changePassword(
+          values.currentPassword,
+          values.newPassword,
+        );
         if (res.succeeded) {
           message.success('Password changed successfully.');
           form.resetFields();
@@ -42,11 +45,18 @@ const ChangePasswordModal = ({
       confirmLoading={loading}
       destroyOnClose
     >
-      <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off">
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleSubmit}
+        autoComplete="off"
+      >
         <Form.Item
           name="currentPassword"
           label="Current Password"
-          rules={[{ required: true, message: 'Please enter your current password' }]}
+          rules={[
+            { required: true, message: 'Please enter your current password' },
+          ]}
         >
           <Input.Password />
         </Form.Item>

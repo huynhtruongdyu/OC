@@ -74,9 +74,15 @@ const MainLayout = () => {
             icon: <SafetyCertificateOutlined />,
             label: 'Administration',
             children: [
-              ...(can('users.view') ? [{ key: '/admin/users', label: 'Users' }] : []),
-              ...(can('roles.view') ? [{ key: '/admin/roles', label: 'Roles' }] : []),
-               ...(can('roles.view') ? [{ key: '/admin/permissions', label: 'Permissions' }] : []),
+              ...(can('users.view')
+                ? [{ key: '/admin/users', label: 'Users' }]
+                : []),
+              ...(can('roles.view')
+                ? [{ key: '/admin/roles', label: 'Roles' }]
+                : []),
+              ...(can('roles.view')
+                ? [{ key: '/admin/permissions', label: 'Permissions' }]
+                : []),
             ],
           } as const,
         ]

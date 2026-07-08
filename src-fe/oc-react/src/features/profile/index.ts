@@ -11,7 +11,9 @@ export type ProfileResponse = {
 };
 
 const getProfile = () =>
-  api.get<ApiResponse<ProfileResponse>>('/api/v1/profile').then((r) => r.data.data!);
+  api
+    .get<ApiResponse<ProfileResponse>>('/api/v1/profile')
+    .then((r) => r.data.data!);
 
 const updateProfile = (displayName: string) =>
   api.put('/api/v1/profile', { displayName });

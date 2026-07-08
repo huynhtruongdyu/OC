@@ -6,7 +6,12 @@ import { AuthContext } from './AuthContext';
 type AuthState = {
   token: string | null;
   refreshToken: string | null;
-  user: { email: string; displayName: string; roles: string[]; permissions: string[] } | null;
+  user: {
+    email: string;
+    displayName: string;
+    roles: string[];
+    permissions: string[];
+  } | null;
 };
 
 const AUTH_KEY = 'oc_auth';
@@ -52,7 +57,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const can = useCallback(
-    (permission: string) => state.user?.permissions?.includes(permission) ?? false,
+    (permission: string) =>
+      state.user?.permissions?.includes(permission) ?? false,
     [state.user?.permissions],
   );
 

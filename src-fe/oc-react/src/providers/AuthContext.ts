@@ -4,7 +4,12 @@ import type { AuthResponse } from '@/features/auth';
 type AuthState = {
   token: string | null;
   refreshToken: string | null;
-  user: { email: string; displayName: string; roles: string[]; permissions: string[] } | null;
+  user: {
+    email: string;
+    displayName: string;
+    roles: string[];
+    permissions: string[];
+  } | null;
 };
 
 export type AuthContextType = AuthState & {

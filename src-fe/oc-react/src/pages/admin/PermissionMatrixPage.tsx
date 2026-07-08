@@ -1,11 +1,26 @@
 import { api } from '@/api';
 import type { ApiResponse } from '@/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Checkbox, Select, Segmented, Spin, Table, Typography } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Select,
+  Segmented,
+  Spin,
+  Table,
+  Typography,
+} from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { ColumnsType } from 'antd/es/table';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRoles, usePermissionGroups, useUpdateRolePermissions, useUsers, useUpdateUserPermissions, adminKeys } from '@/features';
+import {
+  useRoles,
+  usePermissionGroups,
+  useUpdateRolePermissions,
+  useUsers,
+  useUpdateUserPermissions,
+  adminKeys,
+} from '@/features';
 
 const ACTION_ORDER = ['view', 'create', 'update', 'delete', 'import', 'export'];
 
@@ -28,7 +43,11 @@ const PermissionMatrixPage = () => {
   const { mutateAsync: updateUserPerms } = useUpdateUserPermissions();
 
   const selectOptions = useMemo(
-    () => (mode === 'roles' ? roles : users)?.map((e) => ({ label: 'name' in e ? e.name : e.userName, value: e.id })) ?? [],
+    () =>
+      (mode === 'roles' ? roles : users)?.map((e) => ({
+        label: 'name' in e ? e.name : e.userName,
+        value: e.id,
+      })) ?? [],
     [mode, roles, users],
   );
 
@@ -50,11 +69,22 @@ const PermissionMatrixPage = () => {
     let cancelled = false;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
-    api.get<ApiResponse<string[]>>(`/api/v1/admin/${mode}/${selectedId}/permissions`)
-      .then((r) => { if (!cancelled) setPerms(new Set(r.data.data ?? [])); })
-      .catch(() => { if (!cancelled) setPerms(new Set()); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
+    api
+      .get<ApiResponse<string[]>>(
+        `/api/v1/admin/${mode}/${selectedId}/permissions`,
+      )
+      .then((r) => {
+        if (!cancelled) setPerms(new Set(r.data.data ?? []));
+      })
+      .catch(() => {
+        if (!cancelled) setPerms(new Set());
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [selectedId, mode]);
 
   const allPermissions = useMemo(
@@ -85,7 +115,8 @@ const PermissionMatrixPage = () => {
   }, [permGroups]);
 
   const allChecked = useMemo(
-    () => allPermissions.length > 0 && allPermissions.every((p) => perms.has(p)),
+    () =>
+      allPermissions.length > 0 && allPermissions.every((p) => perms.has(p)),
     [allPermissions, perms],
   );
 
@@ -95,33 +126,50 @@ const PermissionMatrixPage = () => {
   );
 
   const toggle = useCallback((perm: string, checked: boolean) => {
-    setPerms((prev) => { const n = new Set(prev); if (checked) n.add(perm); else n.delete(perm); return n; });
-    setDirty(true);
-  }, []);
-
-  const toggleResource = useCallback((group: { permissions: string[] }, checked: boolean) => {
     setPerms((prev) => {
       const n = new Set(prev);
-      for (const perm of group.permissions) {
-        if (checked) n.add(perm);
-        else n.delete(perm);
-      }
+      if (checked) n.add(perm);
+      else n.delete(perm);
       return n;
     });
     setDirty(true);
   }, []);
 
-  const toggleAll = useCallback((checked: boolean) => {
-    setPerms(new Set(checked ? allPermissions : []));
-    setDirty(true);
-  }, [allPermissions]);
+  const toggleResource = useCallback(
+    (group: { permissions: string[] }, checked: boolean) => {
+      setPerms((prev) => {
+        const n = new Set(prev);
+        for (const perm of group.permissions) {
+          if (checked) n.add(perm);
+          else n.delete(perm);
+        }
+        return n;
+      });
+      setDirty(true);
+    },
+    [],
+  );
+
+  const toggleAll = useCallback(
+    (checked: boolean) => {
+      setPerms(new Set(checked ? allPermissions : []));
+      setDirty(true);
+    },
+    [allPermissions],
+  );
 
   const handleSave = useCallback(async () => {
     if (!selectedId) return;
     if (mode === 'roles') {
-      await updateRolePerms({ id: selectedId, data: { permissions: [...perms] } });
+      await updateRolePerms({
+        id: selectedId,
+        data: { permissions: [...perms] },
+      });
     } else {
-      await updateUserPerms({ id: selectedId, data: { permissions: [...perms] } });
+      await updateUserPerms({
+        id: selectedId,
+        data: { permissions: [...perms] },
+      });
     }
     setDirty(false);
     qc.invalidateQueries({ queryKey: adminKeys.all });
@@ -151,12 +199,15 @@ const PermissionMatrixPage = () => {
         const group = permGroups?.find((g) => g.group === record.resource);
         if (!group) return <span>{name}</span>;
         const groupChecked = group.permissions.every((p) => perms.has(p));
-        const groupIndeterminate = !groupChecked && group.permissions.some((p) => perms.has(p));
+        const groupIndeterminate =
+          !groupChecked && group.permissions.some((p) => perms.has(p));
         return (
           <Checkbox
             checked={groupChecked}
             indeterminate={groupIndeterminate}
-            onChange={(e: CheckboxChangeEvent) => toggleResource(group, e.target.checked)}
+            onChange={(e: CheckboxChangeEvent) =>
+              toggleResource(group, e.target.checked)
+            }
           >
             <Typography.Text strong>{name}</Typography.Text>
           </Checkbox>
@@ -175,7 +226,9 @@ const PermissionMatrixPage = () => {
           <div className="flex justify-center">
             <Checkbox
               checked={perms.has(perm)}
-              onChange={(e: CheckboxChangeEvent) => toggle(perm, e.target.checked)}
+              onChange={(e: CheckboxChangeEvent) =>
+                toggle(perm, e.target.checked)
+              }
             />
           </div>
         );
@@ -183,16 +236,33 @@ const PermissionMatrixPage = () => {
     }));
 
     return [resourceCol, ...actionCols];
-  }, [allChecked, someChecked, toggleAll, allActions, permLookup, permGroups, perms, toggleResource, toggle]);
+  }, [
+    allChecked,
+    someChecked,
+    toggleAll,
+    allActions,
+    permLookup,
+    permGroups,
+    perms,
+    toggleResource,
+    toggle,
+  ]);
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Typography.Title level={4} className="m-0">Permission Matrix</Typography.Title>
+        <Typography.Title level={4} className="m-0">
+          Permission Matrix
+        </Typography.Title>
         <div className="flex items-center gap-4">
           <Segmented<Mode>
             value={mode}
-            onChange={(val) => { setMode(val); setSelectedId(null); setHasAutoSelected(false); setDirty(false); }}
+            onChange={(val) => {
+              setMode(val);
+              setSelectedId(null);
+              setHasAutoSelected(false);
+              setDirty(false);
+            }}
             options={[
               { label: 'Roles', value: 'roles' },
               { label: 'Users', value: 'users' },
@@ -202,15 +272,24 @@ const PermissionMatrixPage = () => {
             className="w-48"
             placeholder={`Select a ${mode === 'roles' ? 'role' : 'user'}`}
             value={selectedId}
-            onChange={(val) => { setSelectedId(val); setDirty(false); }}
+            onChange={(val) => {
+              setSelectedId(val);
+              setDirty(false);
+            }}
             options={selectOptions}
             allowClear
             showSearch
             filterOption={(input, option) =>
-              (option?.label as string ?? '').toLowerCase().includes(input.toLowerCase())
+              ((option?.label as string) ?? '')
+                .toLowerCase()
+                .includes(input.toLowerCase())
             }
           />
-          <Button type="primary" onClick={handleSave} disabled={!selectedId || !dirty}>
+          <Button
+            type="primary"
+            onClick={handleSave}
+            disabled={!selectedId || !dirty}
+          >
             Save Changes
           </Button>
         </div>
@@ -218,7 +297,8 @@ const PermissionMatrixPage = () => {
 
       {!selectedId && (
         <Typography.Text type="secondary">
-          Select a {mode === 'roles' ? 'role' : 'user'} above to manage their permissions.
+          Select a {mode === 'roles' ? 'role' : 'user'} above to manage their
+          permissions.
         </Typography.Text>
       )}
 
